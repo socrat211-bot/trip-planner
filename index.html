@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مخطط الخروجات الذكي | الفسحة المظبوطة على قد ميزانيتك</title>
+    <style>
+        :root {
+            --bg-color: #0b0f19;
+            --card-bg: #111827;
+            --accent-color: #fbbf24;
+            --text-main: #f3f4f6;
+            --text-muted: #9ca3af;
+            --primary-blue: #38bdf8;
+            --success-green: #34d399;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .main-title {
+            font-size: 32px;
+            font-weight: 800;
+            color: var(--accent-color);
+            margin-bottom: 5px;
+            text-shadow: 0 0 15px rgba(251, 191, 36, 0.3);
+            text-align: center;
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            font-size: 15px;
+            margin-bottom: 30px;
+            text-align: center;
+            max-width: 450px;
+            line-height: 1.5;
+        }
+
+        .app-card {
+            max-width: 550px;
+            width: 100%;
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 24px;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.7);
+            border: 1px solid #1e293b;
+            box-sizing: border-box;
+        }
+
+        .input-group {
+            margin-bottom: 22px;
+            text-align: right;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 9px;
+            color: var(--primary-blue);
+            font-size: 15px;
+        }
+
+        input[type="number"], select {
+            width: 100%;
+            padding: 14px 18px;
+            background: #1f2937;
+            border: 2px solid #374151;
+            border-radius: 12px;
+            color: white;
+            font-size: 16px;
+            font-weight: 500;
+            outline: none;
+            transition: all 0.3s ease;
+            box-sizing: border-box;
+        }
+
+        input[type="number"]:focus, select:focus {
+            border-color: var(--accent-color);
+            box-shadow: 0 0 10px rgba(251, 191, 36, 0.2);
+        }
+
+        .btn-generate {
+            width: 100%;
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            color: #0b0f19;
+            border: none;
+            padding: 16px;
+            font-size: 18px;
+            font-weight: 700;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 14px rgba(245, 158, 11, 0.4);
+            margin-top: 10px;
+        }
+
+        .btn-generate:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(245, 158, 11, 0.6);
+        }
+
+        .btn-generate:active {
+            transform: translateY(2px);
+        }
+
+        /* ستايل النتيجة الثقيل والمرتب */
+        .result-wrapper {
+            display: none;
+            margin-top: 30px;
+            animation: fadeIn 0.5s ease-in-out forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .result-header {
+            text-align: center;
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--success-green);
+            margin-bottom: 25px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #1e293b;
+        }
+
+        /* خط الجدول الزمني (Timeline) لخطة الخروجة */
+        .timeline {
+            position: relative;
+            border-right: 3px solid #374151;
+            margin-right: 15px;
+            padding-right: 20px;
+            text-align: right;
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 25px;
+        }
+
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            width: 13px;
+            height: 13px;
+            background-color: var(--bg-color);
+            border: 3px solid var(--accent-color);
+            border-radius: 50%;
+            top: 5px;
+            right: -29px;
+            z-index: 1;
+        }
+
+        .item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 700;
+            font-size: 16px;
+            color: var(--primary-blue);
+        }
+
+        .item-price {
+            background: rgba(251, 191, 36, 0.15);
+            color: var(--accent-color);
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 13px;
+            border: 1px solid rgba(251, 191, 36, 0.3);
+        }
+
+        .item-body {
+            font-size: 14px;
+            color: #d1d5db;
+            margin-top: 8px;
+            line-height: 1.6;
+            background: #1f2937;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #374151;
+        }
+
+        .total-summary {
+            background: linear-gradient(135deg, #1e293b, #0f172a);
+            padding: 15px;
+            border-radius: 12px;
+            text-align: center;
+            margin-top: 25px;
+            border: 1px solid #334155;
+            font-weight: bold;
+            color: var(--accent-color);
+        }
+
+        /* مساحات الإعلانات الاحترافية */
+        .ad-container {
+            margin: 20px 0;
+            min-height: 250px;
+            background: var(--card-bg);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            max-width: 550px;
+            border: 1px dashed #334155;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+
+    <h1 class="main-title">مُخَطِطْ الخُرُوجَاتْ الذَّكِي 🗺️✨</h1>
+    <div class="subtitle">اكتب ميزانيتك الحالية واختار محافظتك وسيب الباقي علينا.. هنظبطلك يوم يبهرك أنت وأصحابك!</div>
+
+    <div class="ad-container">
+        <script>
+          atOptions = { 'key' : '04561269f4b174492401ed43bc757fd8', 'format' : 'iframe', 'height' : 250, 'width' : 300, 'params' : {} };
+        </script>
+        <script src="https://www.highperformanceformat.com/04561269f4b174492401ed43bc757fd8/invoke.js"></script>
+    </div>
+
+    <div class="app-card">
+        <div class="input-group">
+            <label for="gov">وين خروجتك اليوم؟ (المحافظة):</label>
+            <select id="gov">
+                <option value="cairo">القاهرة 🗼 (وسط البلد، المعادي، التجمع)</option>
+                <option value="alex">الإسكندرية 🌊 (بحري، ستانلي، المنتزه)</option>
+                <option value="giza">الجيزة 🛕 (الأهرامات، الدقي، الشيخ زايد)</option>
+            </select>
+        </div>
+
+        <div class="input-group">
+            <label for="budget">الميزانية المتاحة معاك (بالجنيه المصري):</label>
+            <input type="number" id="budget" placeholder="مثال: 200، 500، 1000..." min="50">
+        </div>
+
+        <button class="btn-generate" onclick="calculateTrip()">توليد خطة الخروجة الرهيبة 🚀</button>
+
+        <div class="result-wrapper" id="resultWrapper">
+            <div class="result-header">🎯 إليك خطة يومك المثالية بالتفصيل:</div>
+            
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="item-header">
+                        <span>📍 المحطة الأولى: المكان والفسحة</span>
+                        <span class="item-price" id="p1"></span>
+                    </div>
+                    <div class="item-body" id="b1"></div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="item-header">
+                        <span>🍔 المحطة الثانية: وجبة الغداء والتحبيس</span>
+                        <span class="item-price" id="p2"></span>
+                    </div>
+                    <div class="item-body" id="b2"></div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="item-header">
+                        <span>☕ المحطة الثالثة: الحلو والمزاج</span>
+                        <span class="item-price" id="p3"></span>
+                    </div>
+                    <div class="item-body" id="b3"></div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="item-header">
+                        <span>🚌 المحطة الرابعة: المواصلات والطوارئ</span>
+                        <span class="item-price" id="p4"></span>
+                    </div>
+                    <div class="item-body" id="b4"></div>
+                </div>
+            </div>
+
+            <div class="total-summary" id="summaryText"></div>
+        </div>
+    </div>
+
+    <div class="ad-container">
+        <script>
+          atOptions = { 'key' : '04561269f4b174492401ed43bc757fd8', 'format' : 'iframe', 'height' : 250, 'width' : 300, 'params' : {} };
+        </script>
+        <script src="https://www.highperformanceformat.com/04561269f4b174492401ed43bc757fd8/invoke.js"></script>
+    </div>
+
+    <script>
+        function calculateTrip() {
+            const budget = parseInt(document.getElementById('budget').value);
+            const gov = document.getElementById('gov').value;
+            const wrapper = document.getElementById('resultWrapper');
+
+            if (!budget || budget < 50) {
+                alert('يا فنان اكتب ميزانية حقيقية (مش أقل من 50 جنيه عشان تخرج)!');
+                return;
+            }
+
+            // تقسيم الميزانية الذكي: 30% فسحة، 45% أكل، 15% حلو ومشروب، 10% مواصلات
+            const c1 = Math.floor(budget * 0.30);
+            const c2 = Math.floor(budget * 0.45);
+            const c3 = Math.floor(budget * 0.15);
+            const c4 = budget - (c1 + c2 + c3);
+
+            document.getElementById('p1').innerText = c1 + " ج.م";
+            document.getElementById('p2').innerText = c2 + " ج.m";
+            document.getElementById('p3').innerText = c3 + " ج.م";
+            document.getElementById('p4').innerText = c4 + " ج.م";
+
+            let txt1 = "", txt2 = "", txt3 = "", txt4 = "";
+
+            if (gov === 'cairo') {
+                if (budget <= 200) {
+                    txt1 = "قعدة رايقة ع النيل والتمشية فوق كوبري قصر النيل للتصوير، وتذكرة دخول ممشى اهل مصر الجديد.";
+                    txt2 = "سندوتشات كبدة وسجق ميكس خارق من مطعم شعبي نضيف في وسط البلد أو قعدة كشري التحرير.";
+                    txt3 = "مشروب حمص شام سخن أو شاي بالنعناع على قهوة شعبية تراثية في ممر بهلر.";
+                    txt4 = "تذاكر مترو الأنفاق رايح جاي وهيفضل معاك فكة بسيطة.";
+                } else if (budget <= 600) {
+                    txt1 = "زيارة حديقة الأزهر للاستمتاع بالخضرة والمنظر البانورامي للقاهرة وقت الغروب، أو تذكرة دخول برج القاهرة.";
+                    txt2 = "وجبة فتة سوري ومقبلات ممتازة من مطعم مشهور بوسط البلد، أو وجبة برجر دبل تشيز.";
+                    txt3 = "قعدة في كافيه شيك زي سيلانترو أو حلي بـ وافل غرقان شوكولاتة من بليند.";
+                    txt4 = "ميزانية مريحة لركوب تاكسي أو طلب ميكروباص مكيف.";
+                } else {
+                    txt1 = "حجز تذكرة سينما VIP في مول مصر أو سيتي ستارز وتجربة ألعاب بولينج أو أركيد تفاعلية.";
+                    txt2 = "غداء فاخر مشويات ميكس جريل أو وجبة ستيك فخمة في فود كورت فخم أو مطعم هادي بالمعادي.";
+                    txt3 = "تحلية بـ آيس كريم فاخر من براند عالمي وقعدة اسبريسو في كافيه هادي جداً.";
+                    txt4 = "طلب عربية أوبر (Uber) أو كريم مريحة توديك وتجيبك كينج في نفسك.";
+                }
+            } else if (gov === 'alex') {
+                if (budget <= 200) {
+                    txt1 = "تمشية ممتعة على الكورنيش والتقاط صور عند قلعة قايتباي وقضاء وقت على سور بحري.";
+                    txt2 = "حواوشي إسكندراني بلدي سخن موحوح من الأفران الشهيرة هناك مع مخللاتك المظبوطة.";
+                    txt3 = "جيلاتي عزة الشهير أو رز بلبن بالمكسرات من عند الشيخ وفيق.";
+                    txt4 = "ركوب مشروع الكورنيش الأصفر أو ترام الإسكندرية الأثري السريع.";
+                } else if (budget <= 600) {
+                    txt1 = "تذكرة دخول حدائق المنتزه الملكية والتمشية وسط الأشجار والتصوير على الكوبري الشهير.";
+                    txt2 = "طاجن سي فود (جمبري وسبيط) طازة وسخن من مطاعم بحري المعتمدة.";
+                    txt3 = "قعدة رايقة في كافيه مطل على البحر مباشرة في محطة الرمل أو ستانلي مع قهوة مظبوطة.";
+                    txt4 = "تغطية كاملة لمواصلات أوبر بين بحري والمنتزه بدون تعب.";
+                } else {
+                    txt1 = "جولة بحرية خاصة بيخت سريع مع أصحابك من الأنفوشي، أو دخول شاطئ خاص فاخر.";
+                    txt2 = "غداء سمك فاخر وقارص ودنيس في مطعم (قدورة) أو (البلبع) الشهير ع البحر.";
+                    txt3 = "تحلية ملكية فخمة في كافيه (لاتينو) أو قعدة يونانية أثرية في كافيه (Trianon).";
+                    txt4 = "التنقل بسيارة خاصة رايح جاي طول اليوم في راحة تامة.";
+                }
+            } else if (gov === 'giza') {
+                if (budget <= 200) {
+                    txt1 = "زيارة حديقة الأورمان التاريخية والاستمتاع بالطبيعة، أو تمشية على كورنيش العجوزة الشاعري.";
+                    txt2 = "طلب طواجن مكرونة بالفراخ واللحمة المفرومة غرقانة صلصة من محلات كشري الجيزة المشهورة.";
+                    txt3 = "تحلية بـ (قنبلة الكرنك) الشهيرة اللي هتسد معاك لآخر اليوم.";
+                    txt4 = "استخدام المترو وميكروباصات الدقي السريعة.";
+                } else if (budget <= 600) {
+                    txt1 = "تذكرة جولة داخل منطقة الأهرامات الأثرية وركوب الخيل أو الجمال حول الهرم الكبير.";
+                    txt2 = "وجبة فطير مشلتت فلاحي سخن وعسل وجبنة قديمة في كافيه ريفي بالمنصورية.";
+                    txt3 = "مشروب وقهوة في كافيه هادي وشبابي في منطقة المهندسين أو الدقي.";
+                    txt4 = "ميزانية تكفي لطلب عربية إيندرايف أو تاكسي سريع.";
+                } else {
+                    txt1 = "تذكرة يوم كامل للألعاب الخطيرة والإثارة في ملاهي دريم بارك (Dream Park).";
+                    txt2 = "وجبة غداء عالمية في الفود كورت الخاص بمول العرب أو قعدة بمطعم فاخر في الشيخ زايد.";
+                    txt3 = "تحلية بـ مولتن كيك غرقانة شوكولاتة في كافيه (Harris) أو براند كافيه معروف.";
+                    txt4 = "طلب أوبر مريح رايح وجاي لضمان عدم التعب بعد لف الملاهي.";
+                }
+            }
+
+            document.getElementById('b1').innerText = txt1;
+            document.getElementById('b2').innerText = txt2;
+            document.getElementById('b3').innerText = txt3;
+            document.getElementById('b4').innerText = txt4;
+
+            document.getElementById('summaryText').innerText = `💰 تم تخطيط يومك بنجاح بمجموع: ${budget} ج.م فقط لا غير!`;
+            wrapper.style.display = 'block';
+        }
+    </script>
+</body>
+</html>
