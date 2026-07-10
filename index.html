@@ -7,7 +7,7 @@
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Google Fonts - Cairo -->
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght=300;400;600;700;900&display=swap" rel="stylesheet">
     <!-- Leaflet CSS (Map) -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <!-- FontAwesome Icons -->
@@ -31,7 +31,6 @@
             border-radius: 1rem;
             z-index: 10;
         }
-        /* تنسيق مساحات إعلانات Adsterra عشان متضربش */
         .ad-container {
             background: rgba(15, 23, 42, 0.6);
             border: 1px dashed rgba(148, 163, 184, 0.3);
@@ -208,7 +207,7 @@
     <!-- Leaflet JS -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
-        // قاعدة بيانات الأماكن مضاف إليها روابط صور توضيحية خفيفة وسريعة التحميل
+        // قاعدة بيانات الأماكن الصحيحة المخصصة للخروجات بالصور التوضيحية الحقيقية
         const placesDb = {
             chill: [
                 { name: "تمشية على كورنيش أهل مصر", cost: 20, lat: 30.0631, lng: 31.2281, time: "03:00 م", desc: "بدء الخروجة بتمشية خفيفة على النيل مع مشروب سريع ومناظر النيل الجميلة.", img: "https://images.unsplash.com/photo-1541944743827-e04aa6427c33?auto=format&fit=crop&w=600&q=80" },
@@ -216,14 +215,14 @@
                 { name: "قعدة كافيه في شارع المعز", cost: 70, lat: 30.0474, lng: 31.2621, time: "08:30 م", desc: "شاي بنعناع وأجواء الحسين التراثية الهادية مع نغمات العود في المقاهي القديمة.", img: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=600&q=80" }
             ],
             action: [
-                { name: "مدينة الملاهي والألعاب", cost: 250, lat: 30.1114, lng: 31.0205, time: "01:00 م", desc: "ألعاب حماسية سريعة وتجربة مليانة أدرينالين وفرحة مع أصحابك.", img: "https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=600&q=80" },
+                { name: "مدينة الملاهي والألعاب الحماسية", cost: 250, lat: 30.1114, lng: 31.0205, time: "01:00 م", desc: "ألعاب حماسية سريعة وتجربة مليانة أدرينالين وفرحة قوية مع أصحابك.", img: "https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=600&q=80" },
                 { name: "تحدي غرف الهروب (Escape Room)", cost: 180, lat: 30.0211, lng: 31.4889, time: "05:00 م", desc: "مغامرة فك الألغاز والهروب من الغرفة المغلقة بالتعاون مع فريقك قبل انتهاء الوقت.", img: "https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=600&q=80" },
                 { name: "دور بولينج بالمركز الدولي", cost: 100, lat: 30.0544, lng: 31.3122, time: "08:00 م", desc: "تحدي نهائي وسهرة بولينج وبلياردو ممتعة لتحديد الفائز في خروجة اليوم.", img: "https://images.unsplash.com/photo-1538388149542-5e223228cff2?auto=format&fit=crop&w=600&q=80" }
             ],
             photo: [
                 { name: "حديقة الأندلس بالزمالك", cost: 50, lat: 30.0435, lng: 31.2238, time: "03:00 م", desc: "أجمل سيشن تصوير وسط الأشجار والتماثيل التراثية الأندلسية المطلة على النيل مباشرة.", img: "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&w=600&q=80" },
                 { name: "صعود برج القاهرة", cost: 120, lat: 30.0459, lng: 31.2243, time: "06:00 م", desc: "بانوراما كاملة للقاهرة بزاوية 360 درجة وقت الغروب تطلع معاك صور خيالية للذكرى.", img: "https://images.unsplash.com/photo-1547984605-fa123f46f36b?auto=format&fit=crop&w=600&q=80" },
-                { name: "جزيرة المعادي والنيل", cost: 80, lat: 29.9715, lng: 31.2482, time: "08:30 م", desc: "إضاءة ليلية مبهجة وسط البحيرات الصناعية والجسور الخشبية والتقاط صور مميزة.", img: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=600&q=80" }
+                { name: "جزيرة المعادي والنيل", cost: 80, lat: 29.9715, lng: 31.2482, time: "08:30 م", desc: "إضاءة ليلية مبهجة وسط البحيرات الصناعية والجسور الخشبية والتقاط صور مميزة جداً.", img: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=600&q=80" }
             ]
         };
 
@@ -285,7 +284,6 @@
                     let itemTotalCost = adaptedCost * parseInt(currentCount);
                     groupCostSum += itemTotalCost;
 
-                    // توليد كود الـ HTML متضمناً صورة المكان بتصميم متناسق
                     const itemHtml = `
                         <div class="relative">
                             <div class="absolute right-[-31px] top-1 bg-cyan-500 w-4 h-4 rounded-full border-4 border-slate-900"></div>
@@ -294,7 +292,6 @@
                                     <h4 class="text-base font-bold text-white">${place.name}</h4>
                                     <span class="text-xs text-cyan-400 bg-cyan-950 px-2 py-1 rounded">${place.time}</span>
                                 </div>
-                                <!-- صورة المكان المضافة حديثاً -->
                                 <div class="w-full h-40 overflow-hidden rounded-lg border border-slate-700/50">
                                     <img src="${place.img}" alt="${place.name}" class="w-full h-full object-cover hover:scale-105 transition duration-300" loading="lazy">
                                 </div>
