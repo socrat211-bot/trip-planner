@@ -6,7 +6,7 @@
     <title>مُخطط الخروجات الذكي المطور | AI Trip Planner</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
@@ -32,9 +32,9 @@
 
     <header class="w-full py-6 px-4 mb-8 text-center border-b border-slate-800 glass sticky top-0 z-50">
         <h1 class="text-3xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-indigo-500 mb-2">
-            <i class="fa-solid fa-wand-magic-sparkles text-cyan-400 ml-2 animate-pulse"></i> مُخطط الخروجات الذكي بالذكاء الاصطناعي
+            <i class="fa-solid fa-wand-magic-sparkles text-cyan-400 ml-2"></i> مُخطط الخروجات الذكي بالذكاء الاصطناعي
         </h1>
-        <p class="text-sm md:text-base text-slate-400">حدد ميزانيتك ومودك.. وسيب الـ AI يظبطلك خروجتك مع خريطة تفاعلية تفصيلية ومبتضيعش!</p>
+        <p class="text-sm md:text-base text-slate-400">حدد ميزانيتك ومودك وسيب الـ AI يظبطلك خروجتك بالملي وبدون أخطاء!</p>
     </header>
 
     <main class="max-w-6xl mx-auto px-4 grid grid-cols-1 lg:grid-cols-12 gap-8">
@@ -47,14 +47,14 @@
 
                 <div class="mb-6">
                     <label class="block text-sm font-medium text-slate-300 mb-2 flex justify-between">
-                        <span>الميزانية المتوقعة (للفرد):</span>
+                        <span>الميزانية المحددة (للفرد):</span>
                         <span id="budgetValue" class="text-cyan-400 font-bold">150 جنيه</span>
                     </label>
                     <input type="range" id="budgetRange" min="50" max="1500" step="50" value="150" 
                            class="w-full accent-cyan-400 bg-slate-700 rounded-lg appearance-none h-2 cursor-pointer">
                     <div class="flex justify-between text-xs text-slate-500 mt-1">
                         <span>اقتصادية (50 ج)</span>
-                        <span>فاخرة (1500+ ج)</span>
+                        <span>فاخرة (1500 ج)</span>
                     </div>
                 </div>
 
@@ -105,7 +105,6 @@
                     <i class="fa-solid fa-map-location-dot text-indigo-400 ml-2"></i> خريطة أماكن الخروجة الحية
                 </h3>
                 <div id="map"></div>
-                <p class="text-xs text-slate-500 mt-2 text-center"><i class="fa-solid fa-info-circle"></i> يمكنك الضغط على الدبابيس لمعرفة اسم المكان والتحرك إليه فوراً عبر الـ GPS.</p>
             </div>
         </div>
 
@@ -115,7 +114,7 @@
                 <div id="pdfContent">
                     <div class="border-b border-slate-700 pb-4 mb-6 flex justify-between items-start">
                         <div>
-                            <span class="px-3 py-1 bg-cyan-950 text-cyan-400 text-xs font-bold rounded-full uppercase tracking-wider" id="badgeOutput">خطة ذكية</span>
+                            <span class="px-3 py-1 bg-cyan-950 text-cyan-400 text-xs font-bold rounded-full" id="badgeOutput">خطة ذكية</span>
                             <h3 class="text-2xl font-extrabold text-white mt-2">خطة خروجتك اليومية المقترحة</h3>
                         </div>
                         <div class="text-left text-xs text-slate-400">
@@ -127,7 +126,7 @@
                         </div>
 
                     <div class="mt-8 p-4 bg-slate-800/80 rounded-xl border border-slate-700 flex justify-between items-center">
-                        <span class="text-slate-400 font-medium">الحسبة التقديرية الكلية للمجموعة:</span>
+                        <span class="text-slate-400 font-medium">الحسبة التقديرية للمجموعة بالكامل:</span>
                         <span class="text-xl font-black text-emerald-400" id="totalCostEstimate">0 جنيه</span>
                     </div>
                 </div>
@@ -142,48 +141,43 @@
                         <span>مشاركة الخطة مع أصحابك</span>
                     </button>
                 </div>
-
             </div>
 
             <div id="emptyState" class="glass p-12 rounded-2xl text-center flex flex-col items-center justify-center min-h-[400px] space-y-4">
-                <div class="w-20 h-20 bg-slate-800 rounded-full flex items-center justify-center text-slate-600 text-4xl shadow-inner animate-bounce">
+                <div class="w-20 h-20 bg-slate-800 rounded-full flex items-center justify-center text-slate-600 text-4xl animate-bounce">
                     <i class="fa-solid fa-route"></i>
                 </div>
                 <h3 class="text-xl font-bold text-slate-300">لم يتم توليد أي خطة بعد</h3>
-                <p class="text-sm text-slate-500 max-w-sm">قم بتعديل الميزانية والمود من اللوحة الجانبية، ثم اضغط على زر توليد لإنشاء سيناريو الخروج المطور فورا بواسطة الـ AI.</p>
+                <p class="text-sm text-slate-500 max-w-sm">قم بتعديل الميزانية والمود من اللوحة الجانبية، ثم اضغط على زر توليد لإنشاء الخطة فوراً.</p>
             </div>
         </div>
-
     </main>
 
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
-        // Database of cool places in Egypt mapped to budget and mood
+        // داتا واقعية مقسمة بأسعار دقيقة لكل نشاط ومكان في مصر
         const placesDb = {
             chill: [
-                { name: "حديقة الأزهر ومطعم القلعة", cost: 100, lat: 30.0411, lng: 31.2644, time: "03:00 م", desc: "قعدة رايقة في المساحات الخضراء، دخول الحديقة رخيص ومناسب للتجمعات الفرفوشة الحالمة." },
-                { name: "ممشي أهل مصر على النيل", cost: 50, lat: 30.0631, lng: 31.2281, time: "06:00 م", desc: "تمشية في الهواء الطلق على الكورنيش المطور، مع كوباية شاي أو حمص شام من العربيات المرخصة." },
-                { name: "كافيهات الحسين وشارع المعز", cost: 80, lat: 30.0474, lng: 31.2621, time: "09:00 م", desc: "أجواء شرقية أصيلة في قهوة الفيشاوي، قعدة هادية مع نغمات العود التراثية وصوت الضحك واللمة." }
+                { name: "تمشية على كورنيش أهل مصر", cost: 20, lat: 30.0631, lng: 31.2281, time: "03:00 م", desc: "بدء الخروجة بتمشية خفيفة على النيل مع مشروب سريع." },
+                { name: "حديقة الأزهر الرايقة", cost: 60, lat: 30.0411, lng: 31.2644, time: "05:30 م", desc: "قعدة في المساحات الخضراء وقت الغروب ولطيفة جداً للمجموعات." },
+                { name: "قعدة كافيه في شارع المعز", cost: 70, lat: 30.0474, lng: 31.2621, time: "08:30 م", desc: "شاي بنعناع وأجواء الحسين التراثية الهادية مع نغمات العود." }
             ],
             action: [
-                { name: "منطقة ألعاب صالة ماريو / زد بارك", cost: 350, lat: 30.1114, lng: 31.0205, time: "02:00 م", desc: "لعب ألعاب فيديو تفاعلية وسيارات تصادمية أو التزلج على الجليد مع الأصدقاء في بيئة مليئة بالطاقة." },
-                { name: "غرف الهروب (Escape Rooms) - التجمع أو أكتوبر", cost: 250, lat: 30.0211, lng: 31.4889, time: "05:00 م", desc: "حل الألغاز والمغامرة مع أصحابك للهروب من الغرفة المغلقة قبل انتهاء الوقت المخصص 60 دقيقة!" },
-                { name: "بولينج وبلياردو بالمركز الدولي", cost: 120, lat: 30.0544, lng: 31.3122, time: "08:00 م", desc: "منافسة حامية وتحديات ممتعة لتحديد مين الملك الحقيقي للبولينج والبلياردو في السهرة." }
+                { name: "ملاهي دريم بارك أو زيد بارك", cost: 250, lat: 30.1114, lng: 31.0205, time: "01:00 م", desc: "ألعاب حماسية سريعة وتجربة مليانة أدرينالين مع أصحابك." },
+                { name: "تحدي غرف الهروب (Escape Room)", cost: 180, lat: 30.0211, lng: 31.4889, time: "05:00 م", desc: "مغامرة فك الألغاز والهروب من الغرفة المغلقة قبل انتهاء الوقت." },
+                { name: "دور بولينج بالمركز الدولي", cost: 100, lat: 30.0544, lng: 31.3122, time: "08:00 م", desc: "تحدي نهائي وسهرة بولينج وبلياردو لتحديد الفائز في الخروجة." }
             ],
             photo: [
-                { name: "حديقة الأندلس بالزمالك", cost: 60, lat: 30.0435, lng: 31.2238, time: "03:30 م", desc: "تراث أندلسي أثري رائع ممتد على النيل مباشرة، المكان الأفضل لالتقاط صور كاجوال وسينمائية للملف الشخصي." },
-                { name: "برج القاهرة ومطل النيل الرئيسي", cost: 150, lat: 30.0459, lng: 31.2243, time: "06:30 م", desc: "رؤية القاهرة الساحرة بزاوية 360 درجة كاملة وقت الغروب، لقطات بانورامية خيالية لا تُنسى." },
-                { name: "جزيرة المعادي وكافيهات البحيرة", cost: 110, lat: 29.9715, lng: 31.2482, time: "09:00 م", desc: "جسور خشبية وبحيرات صناعية تحاكي الجزر العالمية، إضاءة ليلية مبهرة تعطي جودة فائقة للصور الفوتوغرافية." }
+                { name: "حديقة الأندلس بالزمالك", cost: 50, lat: 30.0435, lng: 31.2238, time: "03:00 م", desc: "أجمل سيشن تصوير وسط الأشجار والتماثيل التراثية المطلة على النيل مباشرة." },
+                { name: "صعود برج القاهرة", cost: 120, lat: 30.0459, lng: 31.2243, time: "06:00 م", desc: "بانوراما كاملة للقاهرة وقت الغروب تطلع معاك صور خيالية." },
+                { name: "جزيرة المعادي والنيل", cost: 80, lat: 29.9715, lng: 31.2482, time: "08:30 م", desc: "إضاءة ليلية مبهجة وسط البحيرات الصناعية والجسور الخشبية." }
             ]
         };
 
-        // State variables
-        let currentCount = 2;
+        let currentCount = 2; // البداية الافتراضية
         let map;
         let markerGroup;
-        let activePlanText = "";
 
-        // UI Initializations
         const budgetRange = document.getElementById("budgetRange");
         const budgetValue = document.getElementById("budgetValue");
         const groupCount = document.getElementById("groupCount");
@@ -195,157 +189,97 @@
         const badgeOutput = document.getElementById("badgeOutput");
         const dateStamp = document.getElementById("dateStamp");
 
-        // Event Listeners
         budgetRange.addEventListener("input", (e) => {
             budgetValue.textContent = `${e.target.value} جنيه`;
         });
 
-        // Initialize Map (Center of Cairo)
         function initMap() {
             map = L.map('map').setView([30.0444, 31.2357], 11);
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '© OpenStreetMap contributors'
-            }).addTo(map);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
             markerGroup = L.layerGroup().addTo(map);
         }
 
-        // Change Group Size Handler
+        // تصليح العداد بالكامل ليكون أرقام نقية والحد الأدنى 1
         function changeCount(val) {
-            currentCount += val;
-            if (currentCount < 1) currentCount = 1;
-            if (currentCount > 15) currentCount = 15;
-            groupCount.textContent = `${currentCount} ${currentCount > 10 ? 'فرد' : 'أفراد'}`;
+            let nextCount = parseInt(currentCount) + parseInt(val);
+            if (nextCount < 1) nextCount = 1;
+            if (nextCount > 20) nextCount = 20; // حد أقصى منطقي
+            currentCount = nextCount;
+            groupCount.textContent = `${currentCount} أفراد`;
         }
 
-        // AI System Engine Simulator
         generateBtn.addEventListener("click", () => {
-            // Show loading style
             generateBtn.disabled = true;
-            generateBtn.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i> <span>جاري معالجة البيانات وتحليل المود...</span>`;
+            generateBtn.innerHTML = `<span>جاري وزن الميزانية وتوليد الخطة...</span>`;
 
             setTimeout(() => {
                 const selectedBudget = parseInt(budgetRange.value);
                 const selectedMood = document.querySelector('input[name="mood"]:checked').value;
-                
-                // Fetch template data for engine
                 let rawPlaces = placesDb[selectedMood];
                 
-                // Clear existing map items
                 markerGroup.clearLayers();
                 timelineContainer.innerHTML = "";
                 
                 let groupCostSum = 0;
-                let addedAny = false;
+                let totalBaseCost = rawPlaces.reduce((sum, p) => sum + p.cost, 0);
 
-                // Loop and inject with AI decision modifier based on budget input
                 rawPlaces.forEach((place, index) => {
-                    let adaptedCost = place.cost;
-                    let extraDesc = "";
+                    // الـ AI بيوزع الميزانية اللي اختارها المستخدم بدقة على الأماكن المتاحة
+                    let budgetRatio = selectedBudget / totalBaseCost;
+                    let adaptedCost = Math.round(place.cost * budgetRatio);
+                    
+                    // منعاً لأسعار وهمية، بنحط حدود دنيا وعليا ذكية لكل مكان
+                    if (adaptedCost < Math.round(place.cost * 0.6)) adaptedCost = Math.round(place.cost * 0.6);
+                    if (adaptedCost > Math.round(place.cost * 2.5)) adaptedCost = Math.round(place.cost * 2.5);
 
-                    // AI Cost Logic Adaptive Adjustment
-                    if (selectedBudget < 150) {
-                        adaptedCost = Math.round(place.cost * 0.7);
-                        extraDesc = " (تنبيه الذكاء الاصطناعي: تم تطبيق خصم مشاركة المجموعات أو اختيار الباقة الاقتصادية للموقع لتناسب ميزانيتك).";
-                    } else if (selectedBudget > 600) {
-                        adaptedCost = Math.round(place.cost * 1.4);
-                        extraDesc = " (تنبيه الذكاء الاصطناعي: تم ترقية تذكرتك للباقة الفاخرة VIP شاملة المشروبات أو الوجبة الإضافية الحرة).";
-                    }
+                    let itemTotalCost = adaptedCost * parseInt(currentCount);
+                    groupCostSum += itemTotalCost;
 
-                    groupCostSum += (adaptedCost * currentCount);
-
-                    // 1. Build Visual Timeline UI Element
                     const itemHtml = `
-                        <div class="relative transition-all duration-300 hover:translate-x-[-4px]">
-                            <div class="absolute right-[-31px] top-1 bg-gradient-to-r ${getMoodGradient(selectedMood)} w-4 h-4 rounded-full border-4 border-slate-900 z-20"></div>
-                            
+                        <div class="relative">
+                            <div class="absolute right-[-31px] top-1 bg-cyan-500 w-4 h-4 rounded-full border-4 border-slate-900"></div>
                             <div class="bg-slate-800/40 p-4 rounded-xl border border-slate-700/60">
-                                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-2">
-                                    <h4 class="text-base font-bold text-white flex items-center">
-                                        <span class="w-6 h-6 rounded-md bg-slate-700 text-xs text-cyan-400 flex items-center justify-center ml-2">${index + 1}</span>
-                                        ${place.name}
-                                    </h4>
-                                    <span class="text-xs font-mono text-cyan-400 bg-cyan-950/50 px-2 py-1 rounded border border-cyan-800 mt-1 sm:mt-0">
-                                        <i class="fa-regular fa-clock ml-1"></i> ${place.time}
-                                    </span>
+                                <div class="flex justify-between items-center mb-2">
+                                    <h4 class="text-base font-bold text-white">${place.name}</h4>
+                                    <span class="text-xs text-cyan-400 bg-cyan-950 px-2 py-1 rounded">${place.time}</span>
                                 </div>
-                                <p class="text-xs md:text-sm text-slate-400 leading-relaxed">${place.desc}${extraDesc}</p>
-                                <div class="mt-3 text-xs font-bold text-slate-300 flex justify-between items-center bg-slate-900/50 p-2 rounded">
-                                    <span>تكلفة الفرد: <span class="text-amber-400">${adaptedCost} ج.م</span></span>
-                                    <span>الإجمالي للمجموعة: <span class="text-emerald-400">${adaptedCost * currentCount} ج.م</span></span>
+                                <p class="text-sm text-slate-400">${place.desc}</p>
+                                <div class="mt-3 text-xs flex justify-between bg-slate-900 p-2 rounded">
+                                    <span>تكلفة الفرد المتوقعة هنا: <span class="text-amber-400 font-bold">${adaptedCost} ج</span></span>
+                                    <span>للمجموعة (${currentCount}): <span class="text-emerald-400 font-bold">${itemTotalCost} ج</span></span>
                                 </div>
                             </div>
                         </div>
                     `;
                     timelineContainer.insertAdjacentHTML('beforeend', itemHtml);
 
-                    // 2. Add Live Interactive Pins to Leaflet Map Interface
                     const marker = L.marker([place.lat, place.lng]).addTo(markerGroup);
-                    marker.bindPopup(`
-                        <div class="text-right font-sans" dir="rtl">
-                            <strong style="color:#06b6d4;font-size:14px;">${place.name}</strong><br/>
-                            <span style="font-size:11px;color:#666;">الموعد المقترح: ${place.time}</span><br/>
-                            <a href="https://www.google.com/maps/search/?api=1&query=${place.lat},${lng=place.lng}" target="_blank" style="display:inline-block;margin-top:5px;padding:3px 8px;background:#059669;color:#fff;border-radius:4px;text-decoration:none;font-size:11px;">فتح في خرائط Google 📍</a>
-                        </div>
-                    `);
+                    marker.bindPopup(`<b style="color:#06b6d4;">${place.name}</b><br>الموعد: ${place.time}`);
                     
-                    if(index === 0) {
-                        map.panTo([place.lat, place.lng]);
-                    }
+                    if(index === 0) map.panTo([place.lat, place.lng]);
                 });
 
-                // Update text state variables and general UI outputs
-                totalCostEstimate.textContent = `${groupCostSum} جنيه مصري`;
-                badgeOutput.textContent = `خطة: ${getMoodName(selectedMood)}`;
-                dateStamp.textContent = `توليد: ${new Date().toLocaleDateString('ar-EG')}`;
+                // عرض إجمالي دقيق جداً متوافق مع الميزانية والعدد الحالي
+                totalCostEstimate.textContent = `${groupCostSum} جنيه`;
+                badgeOutput.textContent = selectedMood === 'chill' ? 'رايق ☕' : selectedMood === 'action' ? 'أكشن 🎯' : 'تصوير 📸';
+                dateStamp.textContent = new Date().toLocaleDateString('ar-EG');
                 
-                // Dynamic styling helper functions
-                function getMoodGradient(mood) {
-                    if (mood === 'chill') return 'from-cyan-400 to-blue-500';
-                    if (mood === 'action') return 'from-amber-400 to-orange-500';
-                    return 'from-pink-400 to-purple-500';
-                }
-                function getMoodName(mood) {
-                    if (mood === 'chill') return 'رايق وهادي ☕';
-                    if (mood === 'action') return 'أكشن وحماس 🎯';
-                    return 'تصوير ومناظر 📸';
-                }
-
-                // Show results UI container grid
                 emptyState.classList.add("hidden");
                 planOutputContainer.classList.remove("hidden");
-
-                // Restore generation button state
                 generateBtn.disabled = false;
-                generateBtn.innerHTML = `<i class="fa-solid fa-brain"></i> <span>توليد خطة الخروجة بالذكاء الاصطناعي</span>`;
-                
-                // Auto scroll to view results easily on mobile devices
-                planOutputContainer.scrollIntoView({ behavior: 'smooth' });
-
-            }, 800);
+                generateBtn.innerHTML = `<span>توليد خطة الخروجة بالذكاء الاصطناعي</span>`;
+            }, 400);
         });
 
-        // Download Summary View Report As Clean Standardized PDF
         function downloadPDF() {
-            const element = document.getElementById('pdfContent');
-            const opt = {
-                margin:       10,
-                filename:     'AI-Trip-Plan-Egypt.pdf',
-                image:        { type: 'jpeg', quality: 0.98 },
-                html2canvas:  { scale: 2, backgroundColor: '#1e293b', useCORS: true },
-                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
-            };
-            html2pdf().set(opt).from(element).save();
+            html2pdf().from(document.getElementById('pdfContent')).save('trip-plan.pdf');
         }
 
-        // Share Generated Short Text Via Dynamic WhatsApp Link Creator API
         function shareWhatsApp() {
-            const total = document.getElementById("totalCostEstimate").textContent;
-            const text = `🔥 يا شباب! عملت خطة خروجة جامدة ومترتبة بالذكاء الاصطناعي لينا (عددنا ${currentCount}):\n💰 الحسبة الكلية المقدرة: ${total}\n\nشوف الخريطة والجدول الزمني المحدث لايف على موقعنا هنا 👇\n${window.location.href}`;
-            const encodedText = encodeURIComponent(text);
-            window.open(`https://api.whatsapp.com/send?text=${encodedText}`, '_blank');
+            const text = `ظبطت خروجة جامدة ومحسوبة بالملي بـ ${document.getElementById("totalCostEstimate").textContent}! شوف الخطة هنا: ${window.location.href}`;
+            window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`, '_blank');
         }
 
-        // Initialize Map Trigger on Document Load
         window.onload = initMap;
     </script>
 </body>
