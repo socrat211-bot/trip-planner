@@ -4,15 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>مُخطط الخروجات الذكي المطور | AI Trip Planner</title>
-    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts - Cairo -->
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght=300;400;600;700;900&display=swap" rel="stylesheet">
-    <!-- Leaflet CSS (Map) -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- html2pdf for PDF generation -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
     <style>
@@ -45,15 +40,13 @@
 </head>
 <body class="min-h-screen pb-12">
 
-    <!-- Header -->
     <header class="w-full py-6 px-4 text-center border-b border-slate-800 glass sticky top-0 z-50">
         <h1 class="text-3xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-indigo-500 mb-2">
             <i class="fa-solid fa-wand-magic-sparkles text-cyan-400 ml-2"></i> مُخطط الخروجات الذكي بالذكاء الاصطناعي
         </h1>
-        <p class="text-sm md:text-base text-slate-400">حدد ميزانيتك ومودك وسيب الـ AI يظبطلك خروجتك بالملي وبدون أخطاء!</p>
+        <p class="text-sm md:text-base text-slate-400">حدد ميزانيتك ومودك وسيب الـ AI يظبطلك خروجتك بالملي بالصور والأسعار!</p>
     </header>
 
-    <!-- مساحة إعلانية علوية احتياطية -->
     <div class="max-w-6xl mx-auto px-4 mt-6">
         <div class="ad-container w-full h-[90px] rounded-xl">
             <span class="p-2 text-center"><i class="fa-solid fa-rectangle-ad ml-1"></i> مساحة إعلانية (بانر علوي عريض)</span>
@@ -62,14 +55,12 @@
 
     <main class="max-w-6xl mx-auto px-4 grid grid-cols-1 lg:grid-cols-12 gap-8 mt-8">
         
-        <!-- Left Column: Settings Panel -->
         <div class="lg:col-span-5 space-y-6">
             <div class="glass p-6 rounded-2xl shadow-xl">
                 <h2 class="text-xl font-bold text-cyan-400 mb-6 flex items-center border-b border-slate-700 pb-3">
                     <i class="fa-solid fa-sliders ml-2"></i> تخصيص الخروجة
                 </h2>
 
-                <!-- Budget Slider -->
                 <div class="mb-6">
                     <label class="block text-sm font-medium text-slate-300 mb-2 flex justify-between">
                         <span>الميزانية المحددة (للفرد):</span>
@@ -83,7 +74,6 @@
                     </div>
                 </div>
 
-                <!-- Mood Options -->
                 <div class="mb-6">
                     <label class="block text-sm font-medium text-slate-300 mb-3">مود الخروجة المفضل:</label>
                     <div class="grid grid-cols-3 gap-3">
@@ -111,7 +101,6 @@
                     </div>
                 </div>
 
-                <!-- Group Size -->
                 <div class="mb-6">
                     <label class="block text-sm font-medium text-slate-300 mb-2">عدد أفراد الخروجة:</label>
                     <div class="flex items-center space-x-reverse space-x-3 bg-slate-800 rounded-xl p-1 border border-slate-700">
@@ -121,14 +110,12 @@
                     </div>
                 </div>
 
-                <!-- Generate Button -->
                 <button id="generateBtn" class="w-full py-4 bg-gradient-to-r from-cyan-500 to-indigo-600 hover:from-cyan-400 hover:to-indigo-500 text-white font-bold rounded-xl shadow-lg transform active:scale-95 transition flex items-center justify-center space-x-reverse space-x-2">
                     <i class="fa-solid fa-brain"></i>
                     <span>توليد خطة الخروجة بالذكاء الاصطناعي</span>
                 </button>
             </div>
 
-            <!-- 1️⃣ كود الإعلان المربع الأول بتاعك (300x250) شغال هنا بالملي -->
             <div class="ad-container w-full h-[250px] rounded-2xl shadow-lg">
                 <script>
                   atOptions = {
@@ -142,7 +129,6 @@
                 <script src="https://www.highperformanceformat.com/1dbd6aa0d79aa551edf53ad17a91d272/invoke.js"></script>
             </div>
 
-            <!-- Map Card Layout -->
             <div class="glass p-4 rounded-2xl shadow-xl">
                 <h3 class="text-base font-bold text-slate-300 mb-3 flex items-center">
                     <i class="fa-solid fa-map-location-dot text-indigo-400 ml-2"></i> خريطة أماكن الخروجة الحية
@@ -151,7 +137,6 @@
             </div>
         </div>
 
-        <!-- Right Column: Results -->
         <div class="lg:col-span-7 space-y-6">
             <div id="planOutputContainer" class="glass p-6 rounded-2xl shadow-xl hidden min-h-[500px] flex flex-col justify-between">
                 
@@ -167,8 +152,7 @@
                     </div>
 
                     <div id="timelineContainer" class="space-y-6 relative border-r-2 border-slate-700 mr-4 pr-6">
-                        <!-- Items dynamically injected -->
-                    </div>
+                        </div>
 
                     <div class="mt-8 p-4 bg-slate-800/80 rounded-xl border border-slate-700 flex justify-between items-center">
                         <span class="text-slate-400 font-medium">الحسبة التقديرية للمجموعة بالكامل:</span>
@@ -176,7 +160,6 @@
                     </div>
                 </div>
 
-                <!-- مساحة إعلانية تفاعلية احتياطية -->
                 <div class="ad-container w-full h-[100px] rounded-xl mt-6">
                     <span class="p-2 text-center"><i class="fa-solid fa-rectangle-ad ml-1"></i> إعلان تفاعلي مدمج في المحتوى</span>
                 </div>
@@ -193,7 +176,6 @@
                 </div>
             </div>
 
-            <!-- Empty State -->
             <div id="emptyState" class="glass p-12 rounded-2xl text-center flex flex-col items-center justify-center min-h-[400px] space-y-4">
                 <div class="w-20 h-20 bg-slate-800 rounded-full flex items-center justify-center text-slate-600 text-4xl animate-bounce">
                     <i class="fa-solid fa-route"></i>
@@ -204,10 +186,9 @@
         </div>
     </main>
 
-    <!-- Leaflet JS -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
-        // قاعدة بيانات الأماكن الصحيحة المخصصة للخروجات بالصور التوضيحية الحقيقية
+        // قاعدة بيانات الأماكن الحقيقية المخصصة لموقع الخروجات مع صور توضيحية ممتازة لكل مكان
         const placesDb = {
             chill: [
                 { name: "تمشية على كورنيش أهل مصر", cost: 20, lat: 30.0631, lng: 31.2281, time: "03:00 م", desc: "بدء الخروجة بتمشية خفيفة على النيل مع مشروب سريع ومناظر النيل الجميلة.", img: "https://images.unsplash.com/photo-1541944743827-e04aa6427c33?auto=format&fit=crop&w=600&q=80" },
@@ -284,6 +265,7 @@
                     let itemTotalCost = adaptedCost * parseInt(currentCount);
                     groupCostSum += itemTotalCost;
 
+                    // هنا التصميم الجديد مضاف إليه صورة المكان بشكل متناسق ومذهل تحت الاسم
                     const itemHtml = `
                         <div class="relative">
                             <div class="absolute right-[-31px] top-1 bg-cyan-500 w-4 h-4 rounded-full border-4 border-slate-900"></div>
@@ -292,7 +274,7 @@
                                     <h4 class="text-base font-bold text-white">${place.name}</h4>
                                     <span class="text-xs text-cyan-400 bg-cyan-950 px-2 py-1 rounded">${place.time}</span>
                                 </div>
-                                <div class="w-full h-40 overflow-hidden rounded-lg border border-slate-700/50">
+                                <div class="w-full h-44 overflow-hidden rounded-lg border border-slate-700/50">
                                     <img src="${place.img}" alt="${place.name}" class="w-full h-full object-cover hover:scale-105 transition duration-300" loading="lazy">
                                 </div>
                                 <p class="text-sm text-slate-400">${place.desc}</p>
@@ -334,10 +316,8 @@
         window.onload = initMap;
     </script>
 
-    <!-- 2️⃣ كود الإعلان الثاني (Social Bar 1) شغال هنا تلقائي في الخلفية -->
     <script src="https://pl30299634.effectivecpmnetwork.com/0c/fe/3b/0cfe3b942bfcaf8cc91d2bc6d85c6f03.js"></script>
 
-    <!-- 3️⃣ كود الإعلان الثالث (Social Bar 2) شغال هنا برضه تلقائي -->
     <script src="https://pl30299633.effectivecpmnetwork.com/0f/c5/24/0fc524475b4d4f02b3704a58efc600f9.js"></script>
 
 </body>
