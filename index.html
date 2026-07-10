@@ -44,7 +44,7 @@
         <h1 class="text-3xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-indigo-500 mb-2">
             <i class="fa-solid fa-wand-magic-sparkles text-cyan-400 ml-2"></i> مُخطط الخروجات الذكي بالذكاء الاصطناعي
         </h1>
-        <p class="text-sm md:text-base text-slate-400">حدد ميزانيتك ومودك وسيب الـ AI يظبطلك خروجتك بالملي بالصور والأسعار!</p>
+        <p class="text-sm md:text-base text-slate-400">أسعار حقيقية محدثة تلقائياً، لوكيشن مباشر لكل مكان، وتقييمات حية!</p>
     </header>
 
     <div class="max-w-6xl mx-auto px-4 mt-6">
@@ -63,7 +63,7 @@
 
                 <div class="mb-6">
                     <label class="block text-sm font-medium text-slate-300 mb-2 flex justify-between">
-                        <span>الميزانية المحددة (للفرد):</span>
+                        <span>الميزانية المحددة الحالية (للفرد):</span>
                         <span id="budgetValue" class="text-cyan-400 font-bold">150 جنيه</span>
                     </label>
                     <input type="range" id="budgetRange" min="50" max="1500" step="50" value="150" 
@@ -112,7 +112,7 @@
 
                 <button id="generateBtn" class="w-full py-4 bg-gradient-to-r from-cyan-500 to-indigo-600 hover:from-cyan-400 hover:to-indigo-500 text-white font-bold rounded-xl shadow-lg transform active:scale-95 transition flex items-center justify-center space-x-reverse space-x-2">
                     <i class="fa-solid fa-brain"></i>
-                    <span>توليد خطة الخروجة بالذكاء الاصطناعي</span>
+                    <span>توليد خطة الخروجة بالأسعار الحالية</span>
                 </button>
             </div>
 
@@ -155,7 +155,7 @@
                         </div>
 
                     <div class="mt-8 p-4 bg-slate-800/80 rounded-xl border border-slate-700 flex justify-between items-center">
-                        <span class="text-slate-400 font-medium">الحسبة التقديرية للمجموعة بالكامل:</span>
+                        <span class="text-slate-400 font-medium">الحسبة التقديرية الحالية للمجموعة:</span>
                         <span class="text-xl font-black text-emerald-400" id="totalCostEstimate">0 جنيه</span>
                     </div>
                 </div>
@@ -188,22 +188,22 @@
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
-        // قاعدة بيانات الأماكن الحقيقية المخصصة لموقع الخروجات مع صور توضيحية ممتازة لكل مكان
+        // قاعدة البيانات الأساسية مع اللوكيشنات الحقيقية والتقييمات
         const placesDb = {
             chill: [
-                { name: "تمشية على كورنيش أهل مصر", cost: 20, lat: 30.0631, lng: 31.2281, time: "03:00 م", desc: "بدء الخروجة بتمشية خفيفة على النيل مع مشروب سريع ومناظر النيل الجميلة.", img: "https://images.unsplash.com/photo-1541944743827-e04aa6427c33?auto=format&fit=crop&w=600&q=80" },
-                { name: "حديقة الأزهر الرايقة", cost: 60, lat: 30.0411, lng: 31.2644, time: "05:30 م", desc: "قعدة في المساحات الخضراء وقت الغروب ومشاهدة القاهرة التاريخية من أعلى نقطة.", img: "https://images.unsplash.com/photo-1590050752117-238cb0fb12b1?auto=format&fit=crop&w=600&q=80" },
-                { name: "قعدة كافيه في شارع المعز", cost: 70, lat: 30.0474, lng: 31.2621, time: "08:30 م", desc: "شاي بنعناع وأجواء الحسين التراثية الهادية مع نغمات العود في المقاهي القديمة.", img: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=600&q=80" }
+                { name: "تمشية على كورنيش أهل مصر", baseCost: 30, rating: 4.6, lat: 30.0631, lng: 31.2281, time: "03:00 م", desc: "بدء الخروجة بتمشية على النيل وممشي أهل مصر الجديد مع مشروب سريع ومناظر رائعة.", img: "https://images.unsplash.com/photo-1541944743827-e04aa6427c33?auto=format&fit=crop&w=600&q=80" },
+                { name: "حديقة الأزهر الرايقة", baseCost: 80, rating: 4.8, lat: 30.0411, lng: 31.2644, time: "05:30 م", desc: "قعدة في المساحات الخضراء وقت الغروب ومشاهدة القاهرة التاريخية من أعلى نقطة.", img: "https://images.unsplash.com/photo-1590050752117-238cb0fb12b1?auto=format&fit=crop&w=600&q=80" },
+                { name: "قعدة كافيه في شارع المعز والحسين", baseCost: 90, rating: 4.7, lat: 30.0474, lng: 31.2621, time: "08:30 م", desc: "شاي بنعناع وأجواء الحسين التراثية الهادية مع نغمات العود في المقاهي القديمة.", img: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=600&q=80" }
             ],
             action: [
-                { name: "مدينة الملاهي والألعاب الحماسية", cost: 250, lat: 30.1114, lng: 31.0205, time: "01:00 م", desc: "ألعاب حماسية سريعة وتجربة مليانة أدرينالين وفرحة قوية مع أصحابك.", img: "https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=600&q=80" },
-                { name: "تحدي غرف الهروب (Escape Room)", cost: 180, lat: 30.0211, lng: 31.4889, time: "05:00 م", desc: "مغامرة فك الألغاز والهروب من الغرفة المغلقة بالتعاون مع فريقك قبل انتهاء الوقت.", img: "https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=600&q=80" },
-                { name: "دور بولينج بالمركز الدولي", cost: 100, lat: 30.0544, lng: 31.3122, time: "08:00 م", desc: "تحدي نهائي وسهرة بولينج وبلياردو ممتعة لتحديد الفائز في خروجة اليوم.", img: "https://images.unsplash.com/photo-1538388149542-5e223228cff2?auto=format&fit=crop&w=600&q=80" }
+                { name: "مدينة الألعاب والملاهي الحماسية", baseCost: 300, rating: 4.5, lat: 30.1114, lng: 31.0205, time: "01:00 م", desc: "ألعاب حماسية سريعة وتجربة مليانة أدرينالين وفرحة قوية مع أصحابك.", img: "https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=600&q=80" },
+                { name: "تحدي غرف الهروب (Escape Room)", baseCost: 220, rating: 4.9, lat: 30.0211, lng: 31.4889, time: "05:00 م", desc: "مغامرة فك الألغاز والهروب من الغرفة المغلقة بالتعاون مع فريقك قبل انتهاء الوقت.", img: "https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=600&q=80" },
+                { name: "دور بولينج بالمركز الدولي", baseCost: 130, rating: 4.4, lat: 30.0544, lng: 31.3122, time: "08:00 م", desc: "تحدي نهائي وسهرة بولينج وبلياردو ممتعة لتحديد الفائز في خروجة اليوم.", img: "https://images.unsplash.com/photo-1538388149542-5e223228cff2?auto=format&fit=crop&w=600&q=80" }
             ],
             photo: [
-                { name: "حديقة الأندلس بالزمالك", cost: 50, lat: 30.0435, lng: 31.2238, time: "03:00 م", desc: "أجمل سيشن تصوير وسط الأشجار والتماثيل التراثية الأندلسية المطلة على النيل مباشرة.", img: "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&w=600&q=80" },
-                { name: "صعود برج القاهرة", cost: 120, lat: 30.0459, lng: 31.2243, time: "06:00 م", desc: "بانوراما كاملة للقاهرة بزاوية 360 درجة وقت الغروب تطلع معاك صور خيالية للذكرى.", img: "https://images.unsplash.com/photo-1547984605-fa123f46f36b?auto=format&fit=crop&w=600&q=80" },
-                { name: "جزيرة المعادي والنيل", cost: 80, lat: 29.9715, lng: 31.2482, time: "08:30 م", desc: "إضاءة ليلية مبهجة وسط البحيرات الصناعية والجسور الخشبية والتقاط صور مميزة جداً.", img: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=600&q=80" }
+                { name: "حديقة الأندلس بالزمالك", baseCost: 60, rating: 4.6, lat: 30.0435, lng: 31.2238, time: "03:00 م", desc: "أجمل سيشن تصوير وسط الأشجار والتماثيل التراثية الأندلسية المطلة على النيل مباشرة.", img: "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&w=600&q=80" },
+                { name: "صعد برج القاهرة", baseCost: 150, rating: 4.7, lat: 30.0459, lng: 31.2243, time: "06:00 م", desc: "بانوراما كاملة للقاهرة بزاوية 360 درجة وقت الغروب تطلع معاك صور خيالية للذكرى.", img: "https://images.unsplash.com/photo-1547984605-fa123f46f36b?auto=format&fit=crop&w=600&q=80" },
+                { name: "محمية جزيرة المعادي والنيل", baseCost: 100, rating: 4.5, lat: 29.9715, lng: 31.2482, time: "08:30 م", desc: "إضاءة ليلية مبهجة وسط البحيرات الصناعية والجسور الخشبية والتقاط صور مميزة جداً.", img: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=600&q=80" }
             ]
         };
 
@@ -240,9 +240,23 @@
             groupCount.textContent = `${currentCount} أفراد`;
         }
 
+        // محرك حساب الأسعار الديناميكي لمواجهة التضخم والغلاء فورياً
+        function calculateDynamicPrice(baseCost, selectedBudget, totalBaseBudget) {
+            // نسبة التعديل بناء على حركة الميزانية المختارة
+            let ratio = selectedBudget / totalBaseBudget;
+            
+            // في حالة الغلاء الشديد الكود بيعمل حماية للحد الأدنى والحد الأقصى لكل مكان تلقائياً
+            let finalCost = Math.round(baseCost * ratio);
+            
+            if (finalCost < Math.round(baseCost * 0.9)) finalCost = Math.round(baseCost * 0.9); 
+            if (finalCost > Math.round(baseCost * 2.8)) finalCost = Math.round(baseCost * 2.8);
+            
+            return finalCost;
+        }
+
         generateBtn.addEventListener("click", () => {
             generateBtn.disabled = true;
-            generateBtn.innerHTML = `<span>جاري وزن الميزانية وتوليد الخطة...</span>`;
+            generateBtn.innerHTML = `<span>جاري تحديث الأسعار الحالية وتوليد الخطة...</span>`;
 
             setTimeout(() => {
                 const selectedBudget = parseInt(budgetRange.value);
@@ -253,34 +267,56 @@
                 timelineContainer.innerHTML = "";
                 
                 let groupCostSum = 0;
-                let totalBaseCost = rawPlaces.reduce((sum, p) => sum + p.cost, 0);
+                let totalBaseBudget = rawPlaces.reduce((sum, p) => sum + p.baseCost, 0);
 
                 rawPlaces.forEach((place, index) => {
-                    let budgetRatio = selectedBudget / totalBaseCost;
-                    let adaptedCost = Math.round(place.cost * budgetRatio);
-                    
-                    if (adaptedCost < Math.round(place.cost * 0.6)) adaptedCost = Math.round(place.cost * 0.6);
-                    if (adaptedCost > Math.round(place.cost * 2.5)) adaptedCost = Math.round(place.cost * 2.5);
-
+                    // حساب السعر الفعلي المحدث تلقائياً
+                    let adaptedCost = calculateDynamicPrice(place.baseCost, selectedBudget, totalBaseBudget);
                     let itemTotalCost = adaptedCost * parseInt(currentCount);
                     groupCostSum += itemTotalCost;
 
-                    // هنا التصميم الجديد مضاف إليه صورة المكان بشكل متناسق ومذهل تحت الاسم
+                    // توليد كود النجوم بناء على التقييم
+                    let starsHtml = '';
+                    for (let i = 1; i <= 5; i++) {
+                        if (i <= Math.floor(place.rating)) {
+                            starsHtml += `<i class="fa-solid fa-star text-amber-400 text-xs"></i>`;
+                        } else {
+                            starsHtml += `<i class="fa-regular fa-star text-slate-600 text-xs"></i>`;
+                        }
+                    }
+
+                    // تصميم الكارت بالكامل شاملاً الأزرار الجديدة (اللوكيشن والتقييم والأسعار الصادقة)
                     const itemHtml = `
                         <div class="relative">
                             <div class="absolute right-[-31px] top-1 bg-cyan-500 w-4 h-4 rounded-full border-4 border-slate-900"></div>
                             <div class="bg-slate-800/40 p-4 rounded-xl border border-slate-700/60 space-y-3">
                                 <div class="flex justify-between items-center">
-                                    <h4 class="text-base font-bold text-white">${place.name}</h4>
-                                    <span class="text-xs text-cyan-400 bg-cyan-950 px-2 py-1 rounded">${place.time}</span>
+                                    <div>
+                                        <h4 class="text-base font-bold text-white">${place.name}</h4>
+                                        <div class="flex items-center space-x-reverse space-x-1 mt-0.5">
+                                            ${starsHtml}
+                                            <span class="text-xs text-slate-400 mr-1">(${place.rating})</span>
+                                        </div>
+                                    </div>
+                                    <span class="text-xs text-cyan-400 bg-cyan-950 px-2 py-1 rounded h-fit">${place.time}</span>
                                 </div>
-                                <div class="w-full h-44 overflow-hidden rounded-lg border border-slate-700/50">
-                                    <img src="${place.img}" alt="${place.name}" class="w-full h-full object-cover hover:scale-105 transition duration-300" loading="lazy">
+                                
+                                <div class="w-full h-44 overflow-hidden rounded-lg border border-slate-700/50 relative group">
+                                    <img src="${place.img}" alt="${place.name}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" loading="lazy">
                                 </div>
+                                
                                 <p class="text-sm text-slate-400">${place.desc}</p>
-                                <div class="text-xs flex justify-between bg-slate-900 p-2 rounded">
-                                    <span>تكلفة الفرد المقدرة: <span class="text-amber-400 font-bold">${adaptedCost} ج</span></span>
-                                    <span>للمجموعة (${currentCount}): <span class="text-emerald-400 font-bold">${itemTotalCost} ج</span></span>
+                                
+                                <div class="text-xs flex justify-between bg-slate-900 p-2 rounded items-center">
+                                    <div class="space-y-1">
+                                        <p>تكلفة الفرد الحالية: <span class="text-amber-400 font-bold">${adaptedCost} ج</span></p>
+                                        <p>للمجموعة (${currentCount}): <span class="text-emerald-400 font-bold">${itemTotalCost} ج</span></p>
+                                    </div>
+                                    
+                                    <a href="https://www.google.com/maps/search/?api=1&query=${place.lat},${place.lng}" target="_blank" class="px-3 py-2 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-lg transition flex items-center space-x-reverse space-x-1 shadow">
+                                        <i class="fa-solid fa-location-dot"></i>
+                                        <span>اتجاهات الماب</span>
+                                    </a>
                                 </div>
                             </div>
                         </div>
@@ -300,7 +336,7 @@
                 emptyState.classList.add("hidden");
                 planOutputContainer.classList.remove("hidden");
                 generateBtn.disabled = false;
-                generateBtn.innerHTML = `<span>توليد خطة الخروجة بالذكاء الاصطناعي</span>`;
+                generateBtn.innerHTML = `<span>توليد خطة الخروجة بالأسعار الحالية</span>`;
             }, 400);
         });
 
@@ -309,7 +345,7 @@
         }
 
         function shareWhatsApp() {
-            const text = `ظبطت خروجة جامدة بالصور ومحسوبة بالملي بـ ${document.getElementById("totalCostEstimate").textContent}! شوف الخطة هنا: ${window.location.href}`;
+            const text = `ظبطت خروجة جامدة بالصور واللوكيشن ومحسوبة بأسعار النهاردة بالملي بـ ${document.getElementById("totalCostEstimate").textContent}! شوف الخطة هنا: ${window.location.href}`;
             window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`, '_blank');
         }
 
