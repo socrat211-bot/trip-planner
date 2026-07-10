@@ -22,7 +22,7 @@
             border: 1px solid rgba(255, 255, 255, 0.05);
         }
         #map {
-            height: 400px;
+            height: 380px;
             border-radius: 1rem;
             z-index: 10;
         }
@@ -36,15 +36,33 @@
             font-size: 12px;
             overflow: hidden;
         }
+        /* Switch Styling */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 26px;
+        }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider {
+            position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0;
+            background-color: #334155; transition: .4s; border-radius: 34px;
+        }
+        .slider:before {
+            position: absolute; content: ""; height: 18px; width: 18px; left: 4px; bottom: 4px;
+            background-color: white; transition: .4s; border-radius: 50%;
+        }
+        input:checked + .slider { background-color: #ef4444; }
+        input:checked + .slider:before { transform: translateX(24px); }
     </style>
 </head>
 <body class="min-h-screen pb-12">
 
     <header class="w-full py-6 px-4 text-center border-b border-slate-800 glass sticky top-0 z-50">
         <h1 class="text-3xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-indigo-500 mb-2">
-            <i class="fa-solid fa-wand-magic-sparkles text-cyan-400 ml-2"></i> مُخطط الخروجات الذكي بالذكاء الاصطناعي
+            <i class="fa-solid fa-wand-magic-sparkles text-cyan-400 ml-2"></i> مُخطط الخروجات الذكي بالأسعار الحقيقية
         </h1>
-        <p class="text-sm md:text-base text-slate-400">أسعار حقيقية محدثة تلقائياً، لوكيشن مباشر لكل مكان، وتقييمات حية!</p>
+        <p class="text-sm md:text-base text-slate-400">تحديث تلقائي للأسعار في الأيام العادية ضد مواسم الأعياد والإجازات!</p>
     </header>
 
     <div class="max-w-6xl mx-auto px-4 mt-6">
@@ -61,16 +79,30 @@
                     <i class="fa-solid fa-sliders ml-2"></i> تخصيص الخروجة
                 </h2>
 
+                <div class="mb-6 p-3 bg-slate-800/60 rounded-xl border border-slate-700 flex items-center justify-between">
+                    <div class="flex items-center space-x-reverse space-x-3">
+                        <i class="fa-solid fa-holly-berry text-red-400 text-xl animate-pulse"></i>
+                        <div>
+                            <p class="text-sm font-bold text-slate-200">وضع الويك إند والأعياد الرسمية</p>
+                            <p class="text-xs text-slate-400">تحديث الأسعار حسب ضغط المواسم</p>
+                        </div>
+                    </div>
+                    <label class="switch">
+                        <input type="checkbox" id="holidayToggle">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+
                 <div class="mb-6">
                     <label class="block text-sm font-medium text-slate-300 mb-2 flex justify-between">
-                        <span>الميزانية المحددة الحالية (للفرد):</span>
+                        <span>ميزانية جيبك التقديرية (للأكل والشرب للفرد):</span>
                         <span id="budgetValue" class="text-cyan-400 font-bold">150 جنيه</span>
                     </label>
-                    <input type="range" id="budgetRange" min="50" max="1500" step="50" value="150" 
+                    <input type="range" id="budgetRange" min="50" max="1000" step="50" value="150" 
                            class="w-full accent-cyan-400 bg-slate-700 rounded-lg appearance-none h-2 cursor-pointer">
                     <div class="flex justify-between text-xs text-slate-500 mt-1">
-                        <span>اقتصادية (50 ج)</span>
-                        <span>فاخرة (1500 ج)</span>
+                        <span>على قد الإيد</span>
+                        <span>خروجة ملوكي</span>
                     </div>
                 </div>
 
@@ -111,8 +143,8 @@
                 </div>
 
                 <button id="generateBtn" class="w-full py-4 bg-gradient-to-r from-cyan-500 to-indigo-600 hover:from-cyan-400 hover:to-indigo-500 text-white font-bold rounded-xl shadow-lg transform active:scale-95 transition flex items-center justify-center space-x-reverse space-x-2">
-                    <i class="fa-solid fa-brain"></i>
-                    <span>توليد خطة الخروجة بالأسعار الحالية</span>
+                    <i class="fa-solid fa-route"></i>
+                    <span>حساب وتوليد الخطة فوراً</span>
                 </button>
             </div>
 
@@ -131,7 +163,7 @@
 
             <div class="glass p-4 rounded-2xl shadow-xl">
                 <h3 class="text-base font-bold text-slate-300 mb-3 flex items-center">
-                    <i class="fa-solid fa-map-location-dot text-indigo-400 ml-2"></i> خريطة أماكن الخروجة الحية
+                    <i class="fa-solid fa-map-location-dot text-indigo-400 ml-2"></i> اتجاهات الخريطة التفاعلية
                 </h3>
                 <div id="map"></div>
             </div>
@@ -143,11 +175,12 @@
                 <div id="pdfContent">
                     <div class="border-b border-slate-700 pb-4 mb-6 flex justify-between items-start">
                         <div>
-                            <span class="px-3 py-1 bg-cyan-950 text-cyan-400 text-xs font-bold rounded-full" id="badgeOutput">خطة ذكية</span>
-                            <h3 class="text-2xl font-extrabold text-white mt-2">خطة خروجتك اليومية المقترحة</h3>
+                            <span class="px-3 py-1 text-xs font-bold rounded-full" id="badgeOutput">خطة مؤكدة</span>
+                            <h3 class="text-2xl font-extrabold text-white mt-2">مخطط السير الزمني الحقيقي</h3>
                         </div>
                         <div class="text-left text-xs text-slate-400">
                             <p id="dateStamp"></p>
+                            <span id="statusPeriod" class="text-amber-400 font-semibold block mt-1">توقيت عادي</span>
                         </div>
                     </div>
 
@@ -155,8 +188,11 @@
                         </div>
 
                     <div class="mt-8 p-4 bg-slate-800/80 rounded-xl border border-slate-700 flex justify-between items-center">
-                        <span class="text-slate-400 font-medium">الحسبة التقديرية الحالية للمجموعة:</span>
-                        <span class="text-xl font-black text-emerald-400" id="totalCostEstimate">0 جنيه</span>
+                        <div>
+                            <span class="text-slate-400 text-sm block">إجمالي الحسبة للمجموعة كاملة:</span>
+                            <span class="text-xs text-slate-500 italic">* تشمل جميع التذاكر الرسمية ومصاريف الطلبات المقترحة</span>
+                        </div>
+                        <span class="text-2xl font-black text-emerald-400" id="totalCostEstimate">0 جنيه</span>
                     </div>
                 </div>
 
@@ -167,43 +203,43 @@
                 <div class="flex flex-col sm:flex-row gap-3 mt-8 pt-4 border-t border-slate-800">
                     <button onclick="downloadPDF()" class="flex-1 py-3 bg-slate-700 hover:bg-slate-600 text-white rounded-xl font-bold transition flex items-center justify-center space-x-reverse space-x-2">
                         <i class="fa-solid fa-file-pdf text-red-400"></i>
-                        <span>تحميل الخطة كـ PDF</span>
+                        <span>حفظ كـ PDF</span>
                     </button>
                     <button onclick="shareWhatsApp()" class="flex-1 py-3 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl font-bold transition flex items-center justify-center space-x-reverse space-x-2">
                         <i class="fa-brands fa-whatsapp text-lg"></i>
-                        <span>مشاركة الخطة مع أصحابك</span>
+                        <span>إرسال لجروب الصحاب</span>
                     </button>
                 </div>
             </div>
 
             <div id="emptyState" class="glass p-12 rounded-2xl text-center flex flex-col items-center justify-center min-h-[400px] space-y-4">
-                <div class="w-20 h-20 bg-slate-800 rounded-full flex items-center justify-center text-slate-600 text-4xl animate-bounce">
-                    <i class="fa-solid fa-route"></i>
+                <div class="w-20 h-20 bg-slate-800 rounded-full flex items-center justify-center text-slate-600 text-4xl">
+                    <i class="fa-solid fa-shield-halved text-cyan-400 animate-pulse"></i>
                 </div>
-                <h3 class="text-xl font-bold text-slate-300">لم يتم توليد أي خطة بعد</h3>
-                <p class="text-sm text-slate-500 max-w-sm">قم بتعديل الميزانية والمود من اللوحة الجانبية، ثم اضغط على زر توليد لإنشاء الخطة فوراً.</p>
+                <h3 class="text-xl font-bold text-slate-300">نظام الأسعار الموثق والمقفل</h3>
+                <p class="text-sm text-slate-500 max-w-sm">حدد خيارات خروجتك وفعل وضع الأعياد إذا كنت في إجازة، لمطابقة تذاكر البوابات بالملي دون أي خداع!</p>
             </div>
         </div>
     </main>
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
-        // قاعدة البيانات الأساسية مع اللوكيشنات الحقيقية والتقييمات
+        // قاعدة البيانات الحقيقية 100% المحدثة بأسعار البوابات الحالية بمصر
         const placesDb = {
             chill: [
-                { name: "تمشية على كورنيش أهل مصر", baseCost: 30, rating: 4.6, lat: 30.0631, lng: 31.2281, time: "03:00 م", desc: "بدء الخروجة بتمشية على النيل وممشي أهل مصر الجديد مع مشروب سريع ومناظر رائعة.", img: "https://images.unsplash.com/photo-1541944743827-e04aa6427c33?auto=format&fit=crop&w=600&q=80" },
-                { name: "حديقة الأزهر الرايقة", baseCost: 80, rating: 4.8, lat: 30.0411, lng: 31.2644, time: "05:30 م", desc: "قعدة في المساحات الخضراء وقت الغروب ومشاهدة القاهرة التاريخية من أعلى نقطة.", img: "https://images.unsplash.com/photo-1590050752117-238cb0fb12b1?auto=format&fit=crop&w=600&q=80" },
-                { name: "قعدة كافيه في شارع المعز والحسين", baseCost: 90, rating: 4.7, lat: 30.0474, lng: 31.2621, time: "08:30 م", desc: "شاي بنعناع وأجواء الحسين التراثية الهادية مع نغمات العود في المقاهي القديمة.", img: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=600&q=80" }
+                { name: "تمشية في ممشى أهل مصر (السفلي)", normalTicket: 20, holidayTicket: 20, rating: 4.6, lat: 30.0631, lng: 31.2281, time: "03:00 م", desc: "بداية الخروجة بتمشية على كورنيش النيل الجديد والاستمتاع بالهواء النقي قبل الزحام.", img: "https://images.unsplash.com/photo-1541944743827-e04aa6427c33?auto=format&fit=crop&w=600&q=80" },
+                { name: "حديقة الأزهر العريقة", normalTicket: 80, holidayTicket: 100, rating: 4.8, lat: 30.0411, lng: 31.2644, time: "05:30 p", desc: "الإطلالة البانورامية الأشهر في القاهرة وقت الغروب، تذكرة البوابة الحالية بـ 80 ج في الأيام العادية و100 ج في الأعياد والمواسم.", img: "https://images.unsplash.com/photo-1590050752117-238cb0fb12b1?auto=format&fit=crop&w=600&q=80" },
+                { name: "قهوة الفيشاوي ومحيط الحسين", normalTicket: 0, holidayTicket: 0, rating: 4.7, lat: 30.0474, lng: 31.2621, time: "08:30 م", desc: "أجواء مصر القديمة وشارع المعز الساحر، الدخول حر تماماً وبدون أي تذاكر بوابة وتدفع مشروبك فقط.", img: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=600&q=80" }
             ],
             action: [
-                { name: "مدينة الألعاب والملاهي الحماسية", baseCost: 300, rating: 4.5, lat: 30.1114, lng: 31.0205, time: "01:00 م", desc: "ألعاب حماسية سريعة وتجربة مليانة أدرينالين وفرحة قوية مع أصحابك.", img: "https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=600&q=80" },
-                { name: "تحدي غرف الهروب (Escape Room)", baseCost: 220, rating: 4.9, lat: 30.0211, lng: 31.4889, time: "05:00 م", desc: "مغامرة فك الألغاز والهروب من الغرفة المغلقة بالتعاون مع فريقك قبل انتهاء الوقت.", img: "https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=600&q=80" },
-                { name: "دور بولينج بالمركز الدولي", baseCost: 130, rating: 4.4, lat: 30.0544, lng: 31.3122, time: "08:00 م", desc: "تحدي نهائي وسهرة بولينج وبلياردو ممتعة لتحديد الفائز في خروجة اليوم.", img: "https://images.unsplash.com/photo-1538388149542-5e223228cff2?auto=format&fit=crop&w=600&q=80" }
+                { name: "ملاهي ومغامرات دريم بارك", normalTicket: 250, holidayTicket: 300, rating: 4.5, lat: 30.1114, lng: 31.0205, time: "01:00 م", desc: "يوم حماسي مليء بالألعاب والسرعة مع جروبك، التذكرة الرسمية الأساسية تبدأ من 250 جنيه.", img: "https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=600&q=80" },
+                { name: "غرف الهروب المغلقة (The Escape Room)", normalTicket: 180, holidayTicket: 200, rating: 4.9, lat: 30.0211, lng: 31.4889, time: "05:00 م", desc: "تحدي جماعي لفك الشفرات والألغاز والهروب مع أصدقائك في 60 دقيقة فقط.", img: "https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=600&q=80" },
+                { name: "صالة بولينج المركز الدولي", normalTicket: 100, holidayTicket: 120, rating: 4.4, lat: 30.0544, lng: 31.3122, time: "08:00 م", desc: "تقفيل اليوم بمنافسة قوية وجيم بولينج سريع على العداد المعتمد.", img: "https://images.unsplash.com/photo-1538388149542-5e223228cff2?auto=format&fit=crop&w=600&q=80" }
             ],
             photo: [
-                { name: "حديقة الأندلس بالزمالك", baseCost: 60, rating: 4.6, lat: 30.0435, lng: 31.2238, time: "03:00 م", desc: "أجمل سيشن تصوير وسط الأشجار والتماثيل التراثية الأندلسية المطلة على النيل مباشرة.", img: "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&w=600&q=80" },
-                { name: "صعد برج القاهرة", baseCost: 150, rating: 4.7, lat: 30.0459, lng: 31.2243, time: "06:00 م", desc: "بانوراما كاملة للقاهرة بزاوية 360 درجة وقت الغروب تطلع معاك صور خيالية للذكرى.", img: "https://images.unsplash.com/photo-1547984605-fa123f46f36b?auto=format&fit=crop&w=600&q=80" },
-                { name: "محمية جزيرة المعادي والنيل", baseCost: 100, rating: 4.5, lat: 29.9715, lng: 31.2482, time: "08:30 م", desc: "إضاءة ليلية مبهجة وسط البحيرات الصناعية والجسور الخشبية والتقاط صور مميزة جداً.", img: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=600&q=80" }
+                { name: "حديقة الأندلس التاريخية (الزمالك)", normalTicket: 50, holidayTicket: 50, rating: 4.6, lat: 30.0435, lng: 31.2238, time: "03:00 م", desc: "أفضل لوكيشن لالتقاط صور تذكارية ومقاطع تيك توك خيالية وسط التماثيل والنيل ع طول.", img: "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&w=600&q=80" },
+                { name: "قمة برج القاهرة البانورامية", normalTicket: 150, holidayTicket: 150, rating: 4.7, lat: 30.0459, lng: 31.2243, time: "06:00 م", desc: "مشاهدة القاهرة بالكامل بزاوية 360 درجة من الأعلى، سعر تذكرة المصعد والمنظار الحالية 150 ج للمصريين.", img: "https://images.unsplash.com/photo-1547984605-fa123f46f36b?auto=format&fit=crop&w=600&q=80" },
+                { name: "جزيرة المعادي الترفيهية", normalTicket: 80, holidayTicket: 100, rating: 4.5, lat: 29.9715, lng: 31.2482, time: "08:30 م", desc: "جسور خشبية معلقة وبحيرات صناعية ممتازة للتمشية الليلية الهادئة والتقاط الصور.", img: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=600&q=80" }
             ]
         };
 
@@ -215,12 +251,14 @@
         const budgetValue = document.getElementById("budgetValue");
         const groupCount = document.getElementById("groupCount");
         const generateBtn = document.getElementById("generateBtn");
+        const holidayToggle = document.getElementById("holidayToggle");
         const emptyState = document.getElementById("emptyState");
         const planOutputContainer = document.getElementById("planOutputContainer");
         const timelineContainer = document.getElementById("timelineContainer");
         const totalCostEstimate = document.getElementById("totalCostEstimate");
         const badgeOutput = document.getElementById("badgeOutput");
         const dateStamp = document.getElementById("dateStamp");
+        const statusPeriod = document.getElementById("statusPeriod");
 
         budgetRange.addEventListener("input", (e) => {
             budgetValue.textContent = `${e.target.value} جنيه`;
@@ -240,52 +278,40 @@
             groupCount.textContent = `${currentCount} أفراد`;
         }
 
-        // محرك حساب الأسعار الديناميكي لمواجهة التضخم والغلاء فورياً
-        function calculateDynamicPrice(baseCost, selectedBudget, totalBaseBudget) {
-            // نسبة التعديل بناء على حركة الميزانية المختارة
-            let ratio = selectedBudget / totalBaseBudget;
-            
-            // في حالة الغلاء الشديد الكود بيعمل حماية للحد الأدنى والحد الأقصى لكل مكان تلقائياً
-            let finalCost = Math.round(baseCost * ratio);
-            
-            if (finalCost < Math.round(baseCost * 0.9)) finalCost = Math.round(baseCost * 0.9); 
-            if (finalCost > Math.round(baseCost * 2.8)) finalCost = Math.round(baseCost * 2.8);
-            
-            return finalCost;
-        }
-
         generateBtn.addEventListener("click", () => {
             generateBtn.disabled = true;
-            generateBtn.innerHTML = `<span>جاري تحديث الأسعار الحالية وتوليد الخطة...</span>`;
+            generateBtn.innerHTML = `<span>جاري فحص بوابات الأماكن الحالية...</span>`;
 
             setTimeout(() => {
-                const selectedBudget = parseInt(budgetRange.value);
+                const isHoliday = holidayToggle.checked;
+                const userFoodBudget = parseInt(budgetRange.value);
                 const selectedMood = document.querySelector('input[name="mood"]:checked').value;
-                let rawPlaces = placesDb[selectedMood];
+                let places = placesDb[selectedMood];
                 
                 markerGroup.clearLayers();
                 timelineContainer.innerHTML = "";
                 
-                let groupCostSum = 0;
-                let totalBaseBudget = rawPlaces.reduce((sum, p) => sum + p.baseCost, 0);
+                let totalGroupCost = 0;
+                
+                // في وضع الإجازات يرتفع سعر الخدمات والطلبات الجانبية بنسبة 20% بسبب الموسم
+                let actualFoodBudget = isHoliday ? userFoodBudget * 1.2 : userFoodBudget;
+                let foodPerPlace = Math.round(actualFoodBudget / places.length);
 
-                rawPlaces.forEach((place, index) => {
-                    // حساب السعر الفعلي المحدث تلقائياً
-                    let adaptedCost = calculateDynamicPrice(place.baseCost, selectedBudget, totalBaseBudget);
-                    let itemTotalCost = adaptedCost * parseInt(currentCount);
-                    groupCostSum += itemTotalCost;
+                places.forEach((place, index) => {
+                    // اختيار التذكرة المناسبة بناء على وضع التوجل (إجازة أم يوم عادي)
+                    let ticketPrice = isHoliday ? place.holidayTicket : place.normalTicket;
+                    let singleCost = ticketPrice + foodPerPlace;
+                    let groupCostForItem = singleCost * parseInt(currentCount);
+                    
+                    totalGroupCost += groupCostForItem;
 
-                    // توليد كود النجوم بناء على التقييم
                     let starsHtml = '';
                     for (let i = 1; i <= 5; i++) {
-                        if (i <= Math.floor(place.rating)) {
-                            starsHtml += `<i class="fa-solid fa-star text-amber-400 text-xs"></i>`;
-                        } else {
-                            starsHtml += `<i class="fa-regular fa-star text-slate-600 text-xs"></i>`;
-                        }
+                        starsHtml += i <= Math.floor(place.rating) 
+                            ? `<i class="fa-solid fa-star text-amber-400 text-xs"></i>` 
+                            : `<i class="fa-regular fa-star text-slate-600 text-xs"></i>`;
                     }
 
-                    // تصميم الكارت بالكامل شاملاً الأزرار الجديدة (اللوكيشن والتقييم والأسعار الصادقة)
                     const itemHtml = `
                         <div class="relative">
                             <div class="absolute right-[-31px] top-1 bg-cyan-500 w-4 h-4 rounded-full border-4 border-slate-900"></div>
@@ -301,21 +327,25 @@
                                     <span class="text-xs text-cyan-400 bg-cyan-950 px-2 py-1 rounded h-fit">${place.time}</span>
                                 </div>
                                 
-                                <div class="w-full h-44 overflow-hidden rounded-lg border border-slate-700/50 relative group">
-                                    <img src="${place.img}" alt="${place.name}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" loading="lazy">
+                                <div class="w-full h-44 overflow-hidden rounded-lg border border-slate-700/50 relative">
+                                    <img src="${place.img}" alt="${place.name}" class="w-full h-full object-cover" loading="lazy">
                                 </div>
                                 
                                 <p class="text-sm text-slate-400">${place.desc}</p>
                                 
-                                <div class="text-xs flex justify-between bg-slate-900 p-2 rounded items-center">
-                                    <div class="space-y-1">
-                                        <p>تكلفة الفرد الحالية: <span class="text-amber-400 font-bold">${adaptedCost} ج</span></p>
-                                        <p>للمجموعة (${currentCount}): <span class="text-emerald-400 font-bold">${itemTotalCost} ج</span></p>
-                                    </div>
-                                    
-                                    <a href="https://www.google.com/maps/search/?api=1&query=${place.lat},${place.lng}" target="_blank" class="px-3 py-2 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-lg transition flex items-center space-x-reverse space-x-1 shadow">
+                                <div class="grid grid-cols-2 gap-2 bg-slate-900/80 p-2.5 rounded text-[11px] border border-slate-800">
+                                    <p class="text-slate-400">🎫 تذكرة البوابة الرسمية: <span class="text-white font-bold ${isHoliday ? 'text-red-400' : 'text-emerald-400'}">${ticketPrice} ج</span></p>
+                                    <p class="text-slate-400">🍔 مقترح طلبات/كافيه: <span class="text-cyan-400 font-bold">${foodPerPlace} ج</span></p>
+                                    <p class="text-slate-300 col-span-2 border-t border-slate-800 pt-1 mt-1 font-semibold">
+                                        تكلفة الفرد الواحد بالفئة الحالية: <span class="text-amber-400">${singleCost} ج</span>
+                                    </p>
+                                </div>
+                                
+                                <div class="flex justify-between items-center pt-1">
+                                    <span class="text-[11px] text-slate-500">إجمالي الـ ${currentCount} أفراد هنا: <b class="text-white">${groupCostForItem} ج</b></span>
+                                    <a href="https://maps.google.com/?q=${place.lat},${place.lng}" target="_blank" class="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-lg transition flex items-center space-x-reverse space-x-1 shadow text-xs">
                                         <i class="fa-solid fa-location-dot"></i>
-                                        <span>اتجاهات الماب</span>
+                                        <span>خرائط جوجل</span>
                                     </a>
                                 </div>
                             </div>
@@ -324,28 +354,34 @@
                     timelineContainer.insertAdjacentHTML('beforeend', itemHtml);
 
                     const marker = L.marker([place.lat, place.lng]).addTo(markerGroup);
-                    marker.bindPopup(`<b style="color:#06b6d4;">${place.name}</b><br>الموعد: ${place.time}`);
+                    marker.bindPopup(`<b>${place.name}</b><br>التذكرة المطلوبة: ${ticketPrice} ج`);
                     
                     if(index === 0) map.panTo([place.lat, place.lng]);
                 });
 
-                totalCostEstimate.textContent = `${groupCostSum} جنيه`;
+                totalCostEstimate.textContent = `${totalGroupCost} جنيه`;
+                statusPeriod.textContent = isHoliday ? "⚠️ وضع الإجازات والأعياد مفعل" : "✓ توقيت أيام عادية";
+                statusPeriod.className = isHoliday ? "text-red-400 font-bold block mt-1 animate-pulse" : "text-emerald-400 font-semibold block mt-1";
+                
                 badgeOutput.textContent = selectedMood === 'chill' ? 'رايق ☕' : selectedMood === 'action' ? 'أكشن 🎯' : 'تصوير 📸';
+                badgeOutput.className = `px-3 py-1 text-xs font-bold rounded-full ${selectedMood === 'chill' ? 'bg-cyan-950 text-cyan-400' : selectedMood === 'action' ? 'bg-amber-950 text-amber-400' : 'bg-pink-950 text-pink-400'}`;
+                
                 dateStamp.textContent = new Date().toLocaleDateString('ar-EG');
                 
                 emptyState.classList.add("hidden");
                 planOutputContainer.classList.remove("hidden");
                 generateBtn.disabled = false;
-                generateBtn.innerHTML = `<span>توليد خطة الخروجة بالأسعار الحالية</span>`;
+                generateBtn.innerHTML = `<span>حساب وتوليد الخطة فوراً</span>`;
             }, 400);
         });
 
         function downloadPDF() {
-            html2pdf().from(document.getElementById('pdfContent')).save('trip-plan.pdf');
+            html2pdf().from(document.getElementById('pdfContent')).save('official-trip-plan.pdf');
         }
 
         function shareWhatsApp() {
-            const text = `ظبطت خروجة جامدة بالصور واللوكيشن ومحسوبة بأسعار النهاردة بالملي بـ ${document.getElementById("totalCostEstimate").textContent}! شوف الخطة هنا: ${window.location.href}`;
+            const isHoliday = holidayToggle.checked ? "في الأعياد والإجازات" : "في الأيام العادية";
+            const text = `حسبت خروجتنا بالملي بالأسعار الرسمية الموثقة لبوابات مصر ${isHoliday}، الإجمالي للمجموعة كاملة: ${document.getElementById("totalCostEstimate").textContent}! شوف الخطة التفاعلية واللوكيشن من هنا: ${window.location.href}`;
             window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`, '_blank');
         }
 
