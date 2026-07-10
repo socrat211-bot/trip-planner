@@ -3,10 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>أداة دمج وتعديل الصور الاحترافية</title>
+    <title>مُخطط الخروجات الذكي المطور | AI Trip Planner</title>
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts - Cairo -->
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <!-- Leaflet CSS (Map) -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- html2pdf for PDF generation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
     <style>
         body {
             font-family: 'Cairo', sans-serif;
@@ -18,76 +26,111 @@
             backdrop-filter: blur(12px);
             border: 1px solid rgba(255, 255, 255, 0.05);
         }
+        #map {
+            height: 400px;
+            border-radius: 1rem;
+            z-index: 10;
+        }
         /* تنسيق مساحات إعلانات Adsterra عشان متضربش */
-        .ad-box {
-            background: rgba(15, 23, 42, 0.5);
+        .ad-container {
+            background: rgba(15, 23, 42, 0.6);
             border: 1px dashed rgba(148, 163, 184, 0.3);
             display: flex;
             align-items: center;
             justify-content: center;
             color: #64748b;
             font-size: 12px;
-            margin: 0 auto;
             overflow: hidden;
         }
     </style>
 </head>
 <body class="min-h-screen pb-12">
 
+    <!-- Header -->
     <header class="w-full py-6 px-4 text-center border-b border-slate-800 glass sticky top-0 z-50">
-        <h1 class="text-3xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-teal-400 to-emerald-500 mb-2">
-            <i class="fa-solid fa-images text-teal-400 ml-2"></i> منصة دمج وتعديل الصور الذكية
+        <h1 class="text-3xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-indigo-500 mb-2">
+            <i class="fa-solid fa-wand-magic-sparkles text-cyan-400 ml-2"></i> مُخطط الخروجات الذكي بالذكاء الاصطناعي
         </h1>
-        <p class="text-sm md:text-base text-slate-400">ادمج صورك، عدل الأبعاد، واصنع تصميمك الخاص بسهولة مجاناً</p>
+        <p class="text-sm md:text-base text-slate-400">حدد ميزانيتك ومودك وسيب الـ AI يظبطلك خروجتك بالملي وبدون أخطاء!</p>
     </header>
 
+    <!-- مساحة إعلانية علوية احتياطية -->
     <div class="max-w-6xl mx-auto px-4 mt-6">
-        <div class="ad-box w-full max-w-[728px] h-[90px] rounded-xl">
-            <span><i class="fa-solid fa-rectangle-ad ml-1"></i> مساحة إعلانية (بانر علوي عريض 728x90)</span>
+        <div class="ad-container w-full h-[90px] rounded-xl">
+            <span class="p-2 text-center"><i class="fa-solid fa-rectangle-ad ml-1"></i> مساحة إعلانية (بانر علوي عريض)</span>
         </div>
     </div>
 
     <main class="max-w-6xl mx-auto px-4 grid grid-cols-1 lg:grid-cols-12 gap-8 mt-8">
         
+        <!-- Left Column: Settings Panel -->
         <div class="lg:col-span-5 space-y-6">
             <div class="glass p-6 rounded-2xl shadow-xl">
-                <h2 class="text-xl font-bold text-teal-400 mb-6 flex items-center border-b border-slate-700 pb-3">
-                    <i class="fa-solid fa-sliders ml-2"></i> أدوات التحكم
+                <h2 class="text-xl font-bold text-cyan-400 mb-6 flex items-center border-b border-slate-700 pb-3">
+                    <i class="fa-solid fa-sliders ml-2"></i> تخصيص الخروجة
                 </h2>
 
-                <div class="mb-4">
-                    <label class="block text-sm font-medium text-slate-300 mb-2">الصورة الأولى الأساسية:</label>
-                    <div class="flex items-center justify-center w-full">
-                        <label class="flex flex-col items-center justify-center w-full h-32 border-2 border-slate-700 border-dashed rounded-xl cursor-pointer bg-slate-800/40 hover:bg-slate-800 transition">
-                            <div class="flex flex-col items-center justify-center pt-5 pb-6">
-                                <i class="fa-solid fa-cloud-arrow-up text-2xl text-teal-400 mb-2"></i>
-                                <p class="text-xs text-slate-400">اضغط لرفع الصورة الأولى</p>
-                            </div>
-                            <input type="file" id="imgInput1" class="hidden" accept="image/*" />
-                        </label>
-                    </div>
-                </div>
-
+                <!-- Budget Slider -->
                 <div class="mb-6">
-                    <label class="block text-sm font-medium text-slate-300 mb-2">الصورة الثانية (الدمج):</label>
-                    <div class="flex items-center justify-center w-full">
-                        <label class="flex flex-col items-center justify-center w-full h-32 border-2 border-slate-700 border-dashed rounded-xl cursor-pointer bg-slate-800/40 hover:bg-slate-800 transition">
-                            <div class="flex flex-col items-center justify-center pt-5 pb-6">
-                                <i class="fa-solid fa-images text-2xl text-emerald-400 mb-2"></i>
-                                <p class="text-xs text-slate-400">اضغط لرفع الصورة الثانية</p>
+                    <label class="block text-sm font-medium text-slate-300 mb-2 flex justify-between">
+                        <span>الميزانية المحددة (للفرد):</span>
+                        <span id="budgetValue" class="text-cyan-400 font-bold">150 جنيه</span>
+                    </label>
+                    <input type="range" id="budgetRange" min="50" max="1500" step="50" value="150" 
+                           class="w-full accent-cyan-400 bg-slate-700 rounded-lg appearance-none h-2 cursor-pointer">
+                    <div class="flex justify-between text-xs text-slate-500 mt-1">
+                        <span>اقتصادية (50 ج)</span>
+                        <span>فاخرة (1500 ج)</span>
+                    </div>
+                </div>
+
+                <!-- Mood Options -->
+                <div class="mb-6">
+                    <label class="block text-sm font-medium text-slate-300 mb-3">مود الخروجة المفضل:</label>
+                    <div class="grid grid-cols-3 gap-3">
+                        <label class="cursor-pointer">
+                            <input type="radio" name="mood" value="chill" checked class="peer sr-only">
+                            <div class="p-3 text-center rounded-xl border border-slate-700 bg-slate-800/50 peer-checked:border-cyan-500 peer-checked:bg-cyan-950/40 peer-checked:text-cyan-400 transition">
+                                <i class="fa-solid fa-mug-hot text-xl mb-1 block"></i>
+                                <span class="text-xs font-semibold">رايق وهادي</span>
                             </div>
-                            <input type="file" id="imgInput2" class="hidden" accept="image/*" />
+                        </label>
+                        <label class="cursor-pointer">
+                            <input type="radio" name="mood" value="action" class="peer sr-only">
+                            <div class="p-3 text-center rounded-xl border border-slate-700 bg-slate-800/50 peer-checked:border-amber-500 peer-checked:bg-amber-950/40 peer-checked:text-amber-400 transition">
+                                <i class="fa-solid fa-gamepad text-xl mb-1 block"></i>
+                                <span class="text-xs font-semibold">أكشن ولعب</span>
+                            </div>
+                        </label>
+                        <label class="cursor-pointer">
+                            <input type="radio" name="mood" value="photo" class="peer sr-only">
+                            <div class="p-3 text-center rounded-xl border border-slate-700 bg-slate-800/50 peer-checked:border-pink-500 peer-checked:bg-pink-950/40 peer-checked:text-pink-400 transition">
+                                <i class="fa-solid fa-camera-retro text-xl mb-1 block"></i>
+                                <span class="text-xs font-semibold">تصوير ومناظر</span>
+                            </div>
                         </label>
                     </div>
                 </div>
 
-                <button id="combineBtn" class="w-full py-4 bg-gradient-to-r from-teal-500 to-emerald-600 hover:from-teal-400 hover:to-emerald-500 text-white font-bold rounded-xl shadow-lg transform active:scale-95 transition flex items-center justify-center space-x-reverse space-x-2">
-                    <i class="fa-solid fa-wand-magic-sparkles"></i>
-                    <span>ابدأ دمج ومعالجة الصور</span>
+                <!-- Group Size -->
+                <div class="mb-6">
+                    <label class="block text-sm font-medium text-slate-300 mb-2">عدد أفراد الخروجة:</label>
+                    <div class="flex items-center space-x-reverse space-x-3 bg-slate-800 rounded-xl p-1 border border-slate-700">
+                        <button type="button" onclick="changeCount(-1)" class="w-10 h-10 rounded-lg bg-slate-700 hover:bg-slate-600 font-bold transition flex items-center justify-center text-xl">-</button>
+                        <span id="groupCount" class="flex-1 text-center font-bold text-lg text-slate-200">2 أفراد</span>
+                        <button type="button" onclick="changeCount(1)" class="w-10 h-10 rounded-lg bg-slate-700 hover:bg-slate-600 font-bold transition flex items-center justify-center text-xl">+</button>
+                    </div>
+                </div>
+
+                <!-- Generate Button -->
+                <button id="generateBtn" class="w-full py-4 bg-gradient-to-r from-cyan-500 to-indigo-600 hover:from-cyan-400 hover:to-indigo-500 text-white font-bold rounded-xl shadow-lg transform active:scale-95 transition flex items-center justify-center space-x-reverse space-x-2">
+                    <i class="fa-solid fa-brain"></i>
+                    <span>توليد خطة الخروجة بالذكاء الاصطناعي</span>
                 </button>
             </div>
 
-            <div class="ad-box w-[300px] h-[250px] rounded-2xl shadow-lg">
+            <!-- 1️⃣ كود الإعلان المربع الأول بتاعك (300x250) شغال هنا بالملي -->
+            <div class="ad-container w-full h-[250px] rounded-2xl shadow-lg">
                 <script>
                   atOptions = {
                     'key' : '1dbd6aa0d79aa551edf53ad17a91d272',
@@ -99,99 +142,205 @@
                 </script>
                 <script src="https://www.highperformanceformat.com/1dbd6aa0d79aa551edf53ad17a91d272/invoke.js"></script>
             </div>
+
+            <!-- Map Card Layout -->
+            <div class="glass p-4 rounded-2xl shadow-xl">
+                <h3 class="text-base font-bold text-slate-300 mb-3 flex items-center">
+                    <i class="fa-solid fa-map-location-dot text-indigo-400 ml-2"></i> خريطة أماكن الخروجة الحية
+                </h3>
+                <div id="map"></div>
+            </div>
         </div>
 
+        <!-- Right Column: Results -->
         <div class="lg:col-span-7 space-y-6">
-            <div class="glass p-6 rounded-2xl shadow-xl min-h-[400px] flex flex-col justify-between">
-                <h3 class="text-lg font-bold text-slate-300 mb-4 border-b border-slate-700 pb-3">
-                    <i class="fa-solid fa-eye text-teal-400 ml-2"></i> معاينة النتيجة النهائية
-                </h3>
+            <div id="planOutputContainer" class="glass p-6 rounded-2xl shadow-xl hidden min-h-[500px] flex flex-col justify-between">
+                
+                <div id="pdfContent">
+                    <div class="border-b border-slate-700 pb-4 mb-6 flex justify-between items-start">
+                        <div>
+                            <span class="px-3 py-1 bg-cyan-950 text-cyan-400 text-xs font-bold rounded-full" id="badgeOutput">خطة ذكية</span>
+                            <h3 class="text-2xl font-extrabold text-white mt-2">خطة خروجتك اليومية المقترحة</h3>
+                        </div>
+                        <div class="text-left text-xs text-slate-400">
+                            <p id="dateStamp"></p>
+                        </div>
+                    </div>
 
-                <div class="flex-1 flex items-center justify-center bg-slate-900/60 rounded-xl p-4 min-h-[300px] border border-slate-800">
-                    <canvas id="mainCanvas" class="max-w-full max-h-[450px] rounded shadow-md hidden"></canvas>
-                    <div id="canvasPlaceholder" class="text-center text-slate-500 space-y-2">
-                        <i class="fa-solid fa-photo-film text-4xl block animate-pulse"></i>
-                        <p class="text-sm">قم برفع الصور واضغط "دمج" لتظهر النتيجة هنا فوراً</p>
+                    <div id="timelineContainer" class="space-y-6 relative border-r-2 border-slate-700 mr-4 pr-6">
+                        <!-- Items dynamically injected -->
+                    </div>
+
+                    <div class="mt-8 p-4 bg-slate-800/80 rounded-xl border border-slate-700 flex justify-between items-center">
+                        <span class="text-slate-400 font-medium">الحسبة التقديرية للمجموعة بالكامل:</span>
+                        <span class="text-xl font-black text-emerald-400" id="totalCostEstimate">0 جنيه</span>
                     </div>
                 </div>
 
-                <div id="downloadArea" class="hidden mt-6 pt-4 border-t border-slate-800 flex gap-4">
-                    <button id="downloadBtn" class="flex-1 py-3 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl font-bold transition flex items-center justify-center space-x-reverse space-x-2">
-                        <i class="fa-solid fa-download"></i>
-                        <span>تحميل الصورة النهائية</span>
+                <!-- مساحة إعلانية تفاعلية احتياطية -->
+                <div class="ad-container w-full h-[100px] rounded-xl mt-6">
+                    <span class="p-2 text-center"><i class="fa-solid fa-rectangle-ad ml-1"></i> إعلان تفاعلي مدمج في المحتوى</span>
+                </div>
+
+                <div class="flex flex-col sm:flex-row gap-3 mt-8 pt-4 border-t border-slate-800">
+                    <button onclick="downloadPDF()" class="flex-1 py-3 bg-slate-700 hover:bg-slate-600 text-white rounded-xl font-bold transition flex items-center justify-center space-x-reverse space-x-2">
+                        <i class="fa-solid fa-file-pdf text-red-400"></i>
+                        <span>تحميل الخطة كـ PDF</span>
+                    </button>
+                    <button onclick="shareWhatsApp()" class="flex-1 py-3 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl font-bold transition flex items-center justify-center space-x-reverse space-x-2">
+                        <i class="fa-brands fa-whatsapp text-lg"></i>
+                        <span>مشاركة الخطة مع أصحابك</span>
                     </button>
                 </div>
+            </div>
+
+            <!-- Empty State -->
+            <div id="emptyState" class="glass p-12 rounded-2xl text-center flex flex-col items-center justify-center min-h-[400px] space-y-4">
+                <div class="w-20 h-20 bg-slate-800 rounded-full flex items-center justify-center text-slate-600 text-4xl animate-bounce">
+                    <i class="fa-solid fa-route"></i>
+                </div>
+                <h3 class="text-xl font-bold text-slate-300">لم يتم توليد أي خطة بعد</h3>
+                <p class="text-sm text-slate-500 max-w-sm">قم بتعديل الميزانية والمود من اللوحة الجانبية، ثم اضغط على زر توليد لإنشاء الخطة فوراً.</p>
             </div>
         </div>
     </main>
 
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
-        const imgInput1 = document.getElementById('imgInput1');
-        const imgInput2 = document.getElementById('imgInput2');
-        const combineBtn = document.getElementById('combineBtn');
-        const mainCanvas = document.getElementById('mainCanvas');
-        const canvasPlaceholder = document.getElementById('canvasPlaceholder');
-        const downloadArea = document.getElementById('downloadArea');
-        const downloadBtn = document.getElementById('downloadBtn');
-        const ctx = mainCanvas.getContext('2d');
+        // قاعدة بيانات الأماكن مضاف إليها روابط صور توضيحية خفيفة وسريعة التحميل
+        const placesDb = {
+            chill: [
+                { name: "تمشية على كورنيش أهل مصر", cost: 20, lat: 30.0631, lng: 31.2281, time: "03:00 م", desc: "بدء الخروجة بتمشية خفيفة على النيل مع مشروب سريع ومناظر النيل الجميلة.", img: "https://images.unsplash.com/photo-1541944743827-e04aa6427c33?auto=format&fit=crop&w=600&q=80" },
+                { name: "حديقة الأزهر الرايقة", cost: 60, lat: 30.0411, lng: 31.2644, time: "05:30 م", desc: "قعدة في المساحات الخضراء وقت الغروب ومشاهدة القاهرة التاريخية من أعلى نقطة.", img: "https://images.unsplash.com/photo-1590050752117-238cb0fb12b1?auto=format&fit=crop&w=600&q=80" },
+                { name: "قعدة كافيه في شارع المعز", cost: 70, lat: 30.0474, lng: 31.2621, time: "08:30 م", desc: "شاي بنعناع وأجواء الحسين التراثية الهادية مع نغمات العود في المقاهي القديمة.", img: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=600&q=80" }
+            ],
+            action: [
+                { name: "مدينة الملاهي والألعاب", cost: 250, lat: 30.1114, lng: 31.0205, time: "01:00 م", desc: "ألعاب حماسية سريعة وتجربة مليانة أدرينالين وفرحة مع أصحابك.", img: "https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=600&q=80" },
+                { name: "تحدي غرف الهروب (Escape Room)", cost: 180, lat: 30.0211, lng: 31.4889, time: "05:00 م", desc: "مغامرة فك الألغاز والهروب من الغرفة المغلقة بالتعاون مع فريقك قبل انتهاء الوقت.", img: "https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=600&q=80" },
+                { name: "دور بولينج بالمركز الدولي", cost: 100, lat: 30.0544, lng: 31.3122, time: "08:00 م", desc: "تحدي نهائي وسهرة بولينج وبلياردو ممتعة لتحديد الفائز في خروجة اليوم.", img: "https://images.unsplash.com/photo-1538388149542-5e223228cff2?auto=format&fit=crop&w=600&q=80" }
+            ],
+            photo: [
+                { name: "حديقة الأندلس بالزمالك", cost: 50, lat: 30.0435, lng: 31.2238, time: "03:00 م", desc: "أجمل سيشن تصوير وسط الأشجار والتماثيل التراثية الأندلسية المطلة على النيل مباشرة.", img: "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&w=600&q=80" },
+                { name: "صعود برج القاهرة", cost: 120, lat: 30.0459, lng: 31.2243, time: "06:00 م", desc: "بانوراما كاملة للقاهرة بزاوية 360 درجة وقت الغروب تطلع معاك صور خيالية للذكرى.", img: "https://images.unsplash.com/photo-1547984605-fa123f46f36b?auto=format&fit=crop&w=600&q=80" },
+                { name: "جزيرة المعادي والنيل", cost: 80, lat: 29.9715, lng: 31.2482, time: "08:30 م", desc: "إضاءة ليلية مبهجة وسط البحيرات الصناعية والجسور الخشبية والتقاط صور مميزة.", img: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=600&q=80" }
+            ]
+        };
 
-        let img1 = null;
-        let img2 = null;
+        let currentCount = 2;
+        let map;
+        let markerGroup;
 
-        imgInput1.addEventListener('change', (e) => {
-            const file = e.target.files[0];
-            if (file) {
-                img1 = new Image();
-                img1.src = URL.createObjectURL(file);
-            }
+        const budgetRange = document.getElementById("budgetRange");
+        const budgetValue = document.getElementById("budgetValue");
+        const groupCount = document.getElementById("groupCount");
+        const generateBtn = document.getElementById("generateBtn");
+        const emptyState = document.getElementById("emptyState");
+        const planOutputContainer = document.getElementById("planOutputContainer");
+        const timelineContainer = document.getElementById("timelineContainer");
+        const totalCostEstimate = document.getElementById("totalCostEstimate");
+        const badgeOutput = document.getElementById("badgeOutput");
+        const dateStamp = document.getElementById("dateStamp");
+
+        budgetRange.addEventListener("input", (e) => {
+            budgetValue.textContent = `${e.target.value} جنيه`;
         });
 
-        imgInput2.addEventListener('change', (e) => {
-            const file = e.target.files[0];
-            if (file) {
-                img2 = new Image();
-                img2.src = URL.createObjectURL(file);
-            }
+        function initMap() {
+            map = L.map('map').setView([30.0444, 31.2357], 11);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+            markerGroup = L.layerGroup().addTo(map);
+        }
+
+        function changeCount(val) {
+            let nextCount = parseInt(currentCount) + parseInt(val);
+            if (nextCount < 1) nextCount = 1;
+            if (nextCount > 20) nextCount = 20;
+            currentCount = nextCount;
+            groupCount.textContent = `${currentCount} أفراد`;
+        }
+
+        generateBtn.addEventListener("click", () => {
+            generateBtn.disabled = true;
+            generateBtn.innerHTML = `<span>جاري وزن الميزانية وتوليد الخطة...</span>`;
+
+            setTimeout(() => {
+                const selectedBudget = parseInt(budgetRange.value);
+                const selectedMood = document.querySelector('input[name="mood"]:checked').value;
+                let rawPlaces = placesDb[selectedMood];
+                
+                markerGroup.clearLayers();
+                timelineContainer.innerHTML = "";
+                
+                let groupCostSum = 0;
+                let totalBaseCost = rawPlaces.reduce((sum, p) => sum + p.cost, 0);
+
+                rawPlaces.forEach((place, index) => {
+                    let budgetRatio = selectedBudget / totalBaseCost;
+                    let adaptedCost = Math.round(place.cost * budgetRatio);
+                    
+                    if (adaptedCost < Math.round(place.cost * 0.6)) adaptedCost = Math.round(place.cost * 0.6);
+                    if (adaptedCost > Math.round(place.cost * 2.5)) adaptedCost = Math.round(place.cost * 2.5);
+
+                    let itemTotalCost = adaptedCost * parseInt(currentCount);
+                    groupCostSum += itemTotalCost;
+
+                    // توليد كود الـ HTML متضمناً صورة المكان بتصميم متناسق
+                    const itemHtml = `
+                        <div class="relative">
+                            <div class="absolute right-[-31px] top-1 bg-cyan-500 w-4 h-4 rounded-full border-4 border-slate-900"></div>
+                            <div class="bg-slate-800/40 p-4 rounded-xl border border-slate-700/60 space-y-3">
+                                <div class="flex justify-between items-center">
+                                    <h4 class="text-base font-bold text-white">${place.name}</h4>
+                                    <span class="text-xs text-cyan-400 bg-cyan-950 px-2 py-1 rounded">${place.time}</span>
+                                </div>
+                                <!-- صورة المكان المضافة حديثاً -->
+                                <div class="w-full h-40 overflow-hidden rounded-lg border border-slate-700/50">
+                                    <img src="${place.img}" alt="${place.name}" class="w-full h-full object-cover hover:scale-105 transition duration-300" loading="lazy">
+                                </div>
+                                <p class="text-sm text-slate-400">${place.desc}</p>
+                                <div class="text-xs flex justify-between bg-slate-900 p-2 rounded">
+                                    <span>تكلفة الفرد المقدرة: <span class="text-amber-400 font-bold">${adaptedCost} ج</span></span>
+                                    <span>للمجموعة (${currentCount}): <span class="text-emerald-400 font-bold">${itemTotalCost} ج</span></span>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    timelineContainer.insertAdjacentHTML('beforeend', itemHtml);
+
+                    const marker = L.marker([place.lat, place.lng]).addTo(markerGroup);
+                    marker.bindPopup(`<b style="color:#06b6d4;">${place.name}</b><br>الموعد: ${place.time}`);
+                    
+                    if(index === 0) map.panTo([place.lat, place.lng]);
+                });
+
+                totalCostEstimate.textContent = `${groupCostSum} جنيه`;
+                badgeOutput.textContent = selectedMood === 'chill' ? 'رايق ☕' : selectedMood === 'action' ? 'أكشن 🎯' : 'تصوير 📸';
+                dateStamp.textContent = new Date().toLocaleDateString('ar-EG');
+                
+                emptyState.classList.add("hidden");
+                planOutputContainer.classList.remove("hidden");
+                generateBtn.disabled = false;
+                generateBtn.innerHTML = `<span>توليد خطة الخروجة بالذكاء الاصطناعي</span>`;
+            }, 400);
         });
 
-        combineBtn.addEventListener('click', () => {
-            if (!img1 || !img2) {
-                alert('يا وحش لازم ترفع الصورتين الأول عشان ندمجهم!');
-                return;
-            }
+        function downloadPDF() {
+            html2pdf().from(document.getElementById('pdfContent')).save('trip-plan.pdf');
+        }
 
-            combineBtn.innerText = "جاري الدمج والمعالجة...";
-            
-            img1.onload = () => {
-                img2.onload = () => {
-                    mainCanvas.width = img1.width;
-                    mainCanvas.height = img1.height;
-                    ctx.drawImage(img1, 0, 0);
-                    ctx.globalAlpha = 0.5;
-                    ctx.drawImage(img2, 0, 0, img1.width, img1.height);
-                    ctx.globalAlpha = 1.0;
+        function shareWhatsApp() {
+            const text = `ظبطت خروجة جامدة بالصور ومحسوبة بالملي بـ ${document.getElementById("totalCostEstimate").textContent}! شوف الخطة هنا: ${window.location.href}`;
+            window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`, '_blank');
+        }
 
-                    canvasPlaceholder.classList.add('hidden');
-                    mainCanvas.classList.remove('hidden');
-                    downloadArea.classList.remove('hidden');
-                    combineBtn.innerHTML = `<i class="fa-solid fa-wand-magic-sparkles"></i> <span>ابدأ دمج ومعالجة الصور</span>`;
-                }
-            }
-            if (img1.complete && img2.complete) {
-                img1.onload();
-            }
-        });
-
-        downloadBtn.addEventListener('click', () => {
-            const link = document.createElement('a');
-            link.download = 'combined-image.png';
-            link.href = mainCanvas.toDataURL();
-            link.click();
-        });
+        window.onload = initMap;
     </script>
 
+    <!-- 2️⃣ كود الإعلان الثاني (Social Bar 1) شغال هنا تلقائي في الخلفية -->
     <script src="https://pl30299634.effectivecpmnetwork.com/0c/fe/3b/0cfe3b942bfcaf8cc91d2bc6d85c6f03.js"></script>
 
+    <!-- 3️⃣ كود الإعلان الثالث (Social Bar 2) شغال هنا برضه تلقائي -->
     <script src="https://pl30299633.effectivecpmnetwork.com/0f/c5/24/0fc524475b4d4f02b3704a58efc600f9.js"></script>
 
 </body>
